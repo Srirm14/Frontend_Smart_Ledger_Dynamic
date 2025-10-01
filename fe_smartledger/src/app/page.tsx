@@ -1,7 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import StyleDemo from "@/components/StyleDemo";
-import ColorTest from "@/components/ColorTest";
 
 export default function Home() {
   return (
@@ -15,6 +14,16 @@ export default function Home() {
           height={38}
           priority
         />
+        
+        {/* Navigation Links */}
+        <div className="flex gap-4 flex-wrap">
+          <Link href="/login">
+            <Button variant="default">Go to Login</Button>
+          </Link>
+          <Link href="/onboarding">
+            <Button variant="outline">Go to Onboarding</Button>
+          </Link>
+        </div>
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{" "}
@@ -66,16 +75,6 @@ export default function Home() {
             <Button variant="ghost">Ghost</Button>
             <Button variant="link">Link</Button>
           </div>
-        </div>
-
-        {/* Color Test Section */}
-        <div className="w-full">
-          <ColorTest />
-        </div>
-
-        {/* Style Demo Section */}
-        <div className="w-full">
-          <StyleDemo />
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
