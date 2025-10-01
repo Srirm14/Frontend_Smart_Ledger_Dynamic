@@ -81,8 +81,8 @@ export function LoginForm({
         localStorage.setItem('isAuthenticated', 'true')
         localStorage.setItem('username', values.username)
         
-        // Redirect to dashboard
-        router.push('/dashboard')
+        // Redirect to default sector (petrolBunk)
+        router.push('/petrolBunk')
       } else {
         alert('Invalid username or password. Try: test / test123')
       }

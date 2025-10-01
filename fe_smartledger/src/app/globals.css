@@ -273,8 +273,8 @@
     --neutral-black: #000000;
   
     /* Sidebar colors - Modern Dark */
-    --sidebar-background: 222 84% 4.9%;
-    --sidebar-foreground: 210 20% 98%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 3.7% 15.9%;
@@ -540,5 +540,16 @@ main-scrollbar-hide .hide_on_export {
 @keyframes shimmer {
   100% {
     transform: translateX(100%);
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

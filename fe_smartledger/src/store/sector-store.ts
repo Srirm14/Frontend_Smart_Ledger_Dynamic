@@ -1,80 +1,111 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { petrolBunkSettings } from '@/config/sectors/petrolBunk/settings'
+import { departmentalStoreSettings } from '@/config/sectors/departmentalStore/settings'
+import { pharmacySettings } from '@/config/sectors/pharmacy/settings'
 
 export interface Sector {
   id: string
   name: string
+  icon: string
+  currency: string
+  defaultTaxRate: number
   features: string[]
-  isCustom: boolean
-  settings?: Record<string, any>
+  settings: Record<string, any>
 }
 
-export interface CustomSector extends Sector {
-  isCustom: true
-  description?: string
-  createdBy: string
-  createdAt: string
-}
-
-interface SectorStore {
-  activeSector: string | null
+export interface SectorStore {
+  // State
+  activeSector: Sector
   availableSectors: Sector[]
-  isLoading: boolean
-  error: string | null
   
   // Actions
-  setActiveSector: (sectorId: string) => Promise<void>
-  addCustomSector: (sector: CustomSector) => void
-  removeSector: (sectorId: string) => void
-  refreshSectors: () => Promise<void>
-  clearError: () => void
+  setActiveSector: (sectorId: string) => void
+  addCustomSector: (sector: Omit<Sector, 'id'>) => void
+  updateSectorSettings: (sectorId: string, settings: Record<string, any>) => void
+  
+  // Computed
+  getEnabledFeatures: () => string[]
+  getSectorSettings: () => Record<string, any>
 }
+
+// Default sectors configuration
+const defaultSectors: Sector[] = [
+  {
+    id: 'petrolBunk',
+    name: petrolBunkSettings.name,
+    icon: petrolBunkSettings.icon,
+    currency: petrolBunkSettings.currency,
+    defaultTaxRate: petrolBunkSettings.defaultTaxRate,
+    features: petrolBunkSettings.features,
+    settings: petrolBunkSettings,
+  },
+  {
+    id: 'departmentalStore',
+    name: departmentalStoreSettings.name,
+    icon: departmentalStoreSettings.icon,
+    currency: departmentalStoreSettings.currency,
+    defaultTaxRate: departmentalStoreSettings.defaultTaxRate,
+    features: departmentalStoreSettings.features,
+    settings: departmentalStoreSettings,
+  },
+  {
+    id: 'pharmacy',
+    name: pharmacySettings.name,
+    icon: pharmacySettings.icon,
+    currency: pharmacySettings.currency,
+    defaultTaxRate: pharmacySettings.defaultTaxRate,
+    features: pharmacySettings.features,
+    settings: pharmacySettings,
+  },
+]
 
 export const useSectorStore = create<SectorStore>()(
   persist(
     (set, get) => ({
-      activeSector: null,
-      availableSectors: [],
-      isLoading: false,
-      error: null,
+      // Initial state - default to petrol bunk
+      activeSector: defaultSectors[0], // petrolBunk
+      availableSectors: defaultSectors,
 
-      setActiveSector: async (sectorId: string) => {
-        set({ isLoading: true, error: null })
-        try {
-          // Simulate API call
-          await new Promise(resolve => setTimeout(resolve, 500))
-          set({ activeSector: sectorId, isLoading: false })
-        } catch (error) {
-          set({ error: 'Failed to switch sector', isLoading: false })
+      // Actions
+      setActiveSector: (sectorId: string) => {
+        const sector = get().availableSectors.find(s => s.id === sectorId)
+        if (sector) {
+          set({ activeSector: sector })
         }
       },
 
-      addCustomSector: (sector: CustomSector) => {
-        set(state => ({
-          availableSectors: [...state.availableSectors, sector]
-        }))
-      },
-
-      removeSector: (sectorId: string) => {
-        set(state => ({
-          availableSectors: state.availableSectors.filter(s => s.id !== sectorId),
-          activeSector: state.activeSector === sectorId ? null : state.activeSector
-        }))
-      },
-
-      refreshSectors: async () => {
-        set({ isLoading: true, error: null })
-        try {
-          // Simulate API call to fetch sectors
-          await new Promise(resolve => setTimeout(resolve, 1000))
-          set({ isLoading: false })
-        } catch (error) {
-          set({ error: 'Failed to refresh sectors', isLoading: false })
+      addCustomSector: (sectorData: Omit<Sector, 'id'>) => {
+        const newSector: Sector = {
+          id: `custom_${Date.now()}`,
+          ...sectorData,
         }
+        set(state => ({
+          availableSectors: [...state.availableSectors, newSector],
+          activeSector: newSector,
+        }))
       },
 
-      clearError: () => {
-        set({ error: null })
+      updateSectorSettings: (sectorId: string, settings: Record<string, any>) => {
+        set(state => ({
+          availableSectors: state.availableSectors.map(sector =>
+            sector.id === sectorId
+              ? { ...sector, settings: { ...sector.settings, ...settings } }
+              : sector
+          ),
+          activeSector: state.activeSector.id === sectorId
+            ? { ...state.activeSector, settings: { ...state.activeSector.settings, ...settings } }
+            : state.activeSector,
+        }))
+      },
+
+      // Computed getters
+      getEnabledFeatures: () => {
+        return get().activeSector.features
+      },
+
+      getSectorSettings: () => {
+        return get().activeSector.settings
       },
     }),
     {
