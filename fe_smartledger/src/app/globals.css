@@ -130,7 +130,7 @@
     animation: shine 2s infinite;
   }
 
-  :root {
+:root {
     /* Light mode defaults */
     --background: #F6F7FA;
     --foreground: #000000;
