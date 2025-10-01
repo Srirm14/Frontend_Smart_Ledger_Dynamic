@@ -1,11 +1,11 @@
 // features.ts - Features enabled for petrol bunk
 export const petrolBunkFeatures = {
-  // sales: {
-  //   enabled: false,
-  //   name: 'Sales Management',
-  //   description: 'Manage fuel sales and transactions',
-  //   icon: 'ShoppingCart',
-  // },
+  sales: {
+    enabled: true,
+    name: 'Sales Management',
+    description: 'Manage fuel sales and transactions',
+    icon: 'ShoppingCart',
+  },
   inventory: {
     enabled: true,
     name: 'Inventory Management', 
