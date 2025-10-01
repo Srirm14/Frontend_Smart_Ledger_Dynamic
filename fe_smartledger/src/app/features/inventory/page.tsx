@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { memo } from 'react'
 
-export default function InventoryPage() {
+function InventoryPage() {
   return (
     <div className="space-y-6">
       <div>
@@ -58,3 +59,5 @@ export default function InventoryPage() {
     </div>
   )
 }
+
+export default memo(InventoryPage)

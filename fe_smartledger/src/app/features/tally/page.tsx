@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { memo } from 'react'
 
-export default function TallyPage() {
+function TallyPage() {
   return (
     <div className="space-y-6">
       <div>
@@ -58,3 +59,5 @@ export default function TallyPage() {
     </div>
   )
 }
+
+export default memo(TallyPage)

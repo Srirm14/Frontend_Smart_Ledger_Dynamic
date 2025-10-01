@@ -1,6 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { memo } from 'react'
 
-export default function SalesPage() {
+// Ultra-fast memoized sales page - only re-renders when props change
+const SalesPage = memo(function SalesPage() {
   return (
     <div className="space-y-6">
       <div>
@@ -57,4 +59,6 @@ export default function SalesPage() {
       </Card>
     </div>
   )
-}
+})
+
+export default SalesPage
