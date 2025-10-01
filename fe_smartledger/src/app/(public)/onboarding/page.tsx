@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation'
-import { useFormilyBuilder, FormilySchema } from '@/hooks/useFormilyBuilder'
+import { useFormilyBuilder, FormilySchema } from '@/hooks/formily/useFormilyBuilder'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'

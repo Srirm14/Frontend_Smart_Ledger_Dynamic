@@ -4,7 +4,6 @@ export const featureRegistry = {
   inventory: () => import('../features/inventory'),
   credit: () => import('../features/credit'),
   tally: () => import('../features/tally'),
-  chat: () => import('../features/chat'),
 } as const
 
 export type FeatureKey = keyof typeof featureRegistry
@@ -28,7 +27,6 @@ export const getFeatureDisplayName = (featureKey: FeatureKey): string => {
     inventory: 'Inventory Management',
     credit: 'Credit Management',
     tally: 'Tally Integration',
-    chat: 'Chat & AI Assistant',
   }
   return displayNames[featureKey] || featureKey
 }
