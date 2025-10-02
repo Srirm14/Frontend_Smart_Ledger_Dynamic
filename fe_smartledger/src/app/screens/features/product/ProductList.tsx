@@ -1,16 +1,18 @@
 "use client"
 
-import SmartTable, { Column } from '@/components/shared/SmartTable'
+import SmartTable, { Column } from '@/components/shared/Table/SmartTable'
+import SmartTableActionPopover, { ActionItem } from '@/components/shared/Table/SmartTableActionPopover'
 import { memo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
 import { 
   Package, 
   Tag, 
   IndianRupee, 
   Scale, 
   Clock,
-  MoreHorizontal
+  Edit,
+  ToggleLeft,
+  Trash2
 } from 'lucide-react'
 
 // Mock data for demonstration
@@ -52,6 +54,25 @@ const ProductList = memo(function ProductList() {
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
 
+  const getActionItems = (row: any): ActionItem[] => [
+    {
+      label: 'Modify Price',
+      icon: <Edit className="h-4 w-4" />,
+      onClick: () => handleModifyPrice(row),
+    },
+    {
+      label: 'Make Inactive',
+      icon: <ToggleLeft className="h-4 w-4" />,
+      onClick: () => handleToggleStatus(row),
+    },
+    {
+      label: 'Delete',
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: () => handleDelete(row),
+      variant: 'destructive',
+    },
+  ]
+
   const columns: Column[] = [
     {
       key: 'name',
@@ -87,19 +108,35 @@ const ProductList = memo(function ProductList() {
       key: 'actions',
       label: 'Actions',
       cell: ({ row }: any) => (
-        <div className="flex items-center text-left">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleRowAction('menu', row.original)}
-            className="h-8 w-8 p-0"
-          >
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </div>
+        <SmartTableActionPopover 
+          actions={getActionItems(row.original)} 
+          rowData={row.original}
+        />
       ),
     },
   ]
+
+  const handleModifyPrice = (row: any) => {
+    console.log('Modify price for:', row.name)
+    // Handle modify price action
+  }
+
+  const handleToggleStatus = (row: any) => {
+    console.log('Toggle status for:', row.name)
+    // Handle toggle status action
+  }
+
+  const handleDelete = (row: any) => {
+    console.log('Delete:', row.name)
+    // Handle delete action
+  }
+
+  const handleRowClick = (row: any) => {
+    const currentPath = window.location.pathname
+    const pathParts = currentPath.split('/').filter(Boolean)
+    const sector = pathParts[0] || 'petrolBunk'
+    router.push(`/${sector}/product/${row.id}`)
+  }
 
   const handleRowAction = (action: string, row: any) => {
     if (action === 'menu') {
@@ -120,7 +157,8 @@ const ProductList = memo(function ProductList() {
       itemsPerPage={itemsPerPage}
       onPageChange={setCurrentPage}
       onItemsPerPageChange={setItemsPerPage}
-      onRowAction={handleRowAction}
+      onRowClick={handleRowClick}
+      isRowClickable={true}
       tableHeight="600px"
     />
     </>

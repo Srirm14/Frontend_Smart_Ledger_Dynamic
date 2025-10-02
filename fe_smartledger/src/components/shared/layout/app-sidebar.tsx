@@ -36,7 +36,7 @@ import {
 import { useSectorStore } from '@/store/sector-store'
 import { getFeatureDisplayName } from '@/config/feature-registry'
 import { SectorSelector } from './sector-selector'
-import { UserProfilePopover } from '@/components/shared/user-profile-popover'
+import { UserProfilePopover } from '@/components/shared/layout/user-profile-popover'
 import { useTheme } from '@/hooks/use-theme'
 
 // Feature data with icons

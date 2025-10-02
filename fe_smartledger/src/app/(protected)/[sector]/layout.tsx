@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { AppSidebar } from '@/components/layout/app-sidebar'
-import { SiteHeader } from '@/components/layout/site-header'
+import { AppSidebar } from '@/components/shared/layout/app-sidebar'
+import { SiteHeader } from '@/components/shared/layout/site-header'
 import {
   SidebarInset,
   SidebarProvider,

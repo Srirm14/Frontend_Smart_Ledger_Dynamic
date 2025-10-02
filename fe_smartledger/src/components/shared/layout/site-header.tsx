@@ -19,7 +19,7 @@ import {
 // Removed unused imports
 import { useSectorStore } from '@/store/sector-store'
 import { SectorSelector } from './sector-selector'
-import { SmartDatePicker } from '@/components/shared/smartDatePicker'
+import { SmartDatePicker } from '@/components/shared/DatePicker/smartDatePicker'
 import { useTheme } from '@/hooks/use-theme'
 
 export function SiteHeader() {

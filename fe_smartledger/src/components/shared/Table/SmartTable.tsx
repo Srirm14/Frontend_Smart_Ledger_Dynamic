@@ -384,7 +384,7 @@ const SmartTable = <T extends Record<string, any>>({
                               isFirstColumn && startAndEndColPin && "sticky left-0 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-lg z-10",
                               isLastColumn && startAndEndColPin && "sticky right-0 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-700 shadow-lg z-10",
                               isRowClickable && !isDisabled && isFirstColumn &&
-                                "font-semibold group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:underline"
+                                "font-semibold group-hover:text-primary-600 dark:group-hover:text-primary-400 group-hover:underline"
                             );
 
                             return (
