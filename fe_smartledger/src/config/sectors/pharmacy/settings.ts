@@ -10,5 +10,5 @@ export const pharmacySettings = {
     open: '08:00',
     close: '22:00',
   },
-  features: ['sales', 'inventory', 'credit', 'tally'],
+  features: ['product', 'sales', 'inventory', 'staff', 'customer', 'credit', 'cashflow', 'tally', 'reports'],
 } as const

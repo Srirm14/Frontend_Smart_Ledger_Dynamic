@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { memo } from 'react'
 
-function InventoryPage() {
+const InventoryPage = memo(function InventoryPage() {
   return (
     <div className="space-y-6">
       <div>
@@ -55,32 +55,9 @@ function InventoryPage() {
             <p className="text-sm text-gray-400 mt-2">This will include stock tracking, purchase orders, and inventory reports</p>
           </div>
         </CardContent>
-
-        <CardContent>
-          <div className="text-center py-8">
-            <p className="text-gray-500">Inventory management features coming soon...</p>
-            <p className="text-sm text-gray-400 mt-2">This will include stock tracking, purchase orders, and inventory reports</p>
-          </div>
-        </CardContent>
-
-
-        <CardContent>
-          <div className="text-center py-8">
-            <p className="text-gray-500">Inventory management features coming soon...</p>
-            <p className="text-sm text-gray-400 mt-2">This will include stock tracking, purchase orders, and inventory reports</p>
-          </div>
-        </CardContent>
-
-
-        <CardContent>
-          <div className="text-center py-8">
-            <p className="text-gray-500">Inventory management features coming soon...</p>
-            <p className="text-sm text-gray-400 mt-2">This will include stock tracking, purchase orders, and inventory reports</p>
-          </div>
-        </CardContent>
       </Card>
     </div>
   )
-}
+})
 
-export default memo(InventoryPage)
+export default InventoryPage

@@ -30,24 +30,30 @@ import {
   Wrench,
 } from 'lucide-react'
 import { useSectorStore } from '@/store/sector-store'
-import { petrolBunkFeatures } from '@/config/sectors/petrolBunk/features'
-import { departmentalStoreFeatures } from '@/config/sectors/departmentalStore/features'
-import { pharmacyFeatures } from '@/config/sectors/pharmacy/features'
+import { petrolBunkSettings } from '@/config/sectors/petrolBunk/settings'
+import { departmentalStoreSettings } from '@/config/sectors/departmentalStore/settings'
+import { pharmacySettings } from '@/config/sectors/pharmacy/settings'
 import { getAvailableFeatures } from '@/app/features/feature-factory'
+import { getFeatureDisplayName } from '@/config/feature-registry'
 
 // Feature data with icons
 const featureIcons = {
+  product: ShoppingCart,
   sales: ShoppingCart,
   inventory: Package,
+  staff: Building2,
+  customer: Building2,
   credit: CreditCard,
+  cashflow: BarChart3,
   tally: BarChart3,
+  reports: BarChart3,
 } as const
 
-// Feature configurations by sector
-const sectorFeatures = {
-  petrolBunk: petrolBunkFeatures,
-  departmentalStore: departmentalStoreFeatures,
-  pharmacy: pharmacyFeatures,
+// Sector settings by sector
+const sectorSettings = {
+  petrolBunk: petrolBunkSettings,
+  departmentalStore: departmentalStoreSettings,
+  pharmacy: pharmacySettings,
 } as const
 
 // Sector icons
@@ -68,13 +74,9 @@ export function AppSidebar() {
   console.log('Active Sector:', activeSector.name)
   console.log('Enabled Features:', enabledFeatures)
   
-  // Get all features defined in the current sector's features configuration
-  const sectorFeatureConfig = sectorFeatures[activeSector.id as keyof typeof sectorFeatures]
-  const allSectorFeatures = Object.keys(sectorFeatureConfig || {}).filter(featureKey => {
-    const feature = sectorFeatureConfig?.[featureKey as keyof typeof sectorFeatureConfig]
-    return feature && feature.enabled === true
-  })
-  console.log('All Sector Features:', allSectorFeatures)
+  // Use only the enabled features from the store
+  const sectorFeatures = enabledFeatures
+  console.log('Sector Features (Enabled Only):', sectorFeatures)
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated')
@@ -113,47 +115,30 @@ export function AppSidebar() {
           <SidebarGroupLabel>All Features</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {(() => {
-                // Get all features that are defined in the current sector's features configuration
-                const sectorFeatureConfig = sectorFeatures[activeSector.id as keyof typeof sectorFeatures]
-                const allSectorFeatures = Object.keys(sectorFeatureConfig || {}).filter(featureKey => {
-                  const feature = sectorFeatureConfig?.[featureKey as keyof typeof sectorFeatureConfig]
-                  return feature && feature.enabled === true
-                })
+              {sectorFeatures.map((featureId) => {
+                const IconComponent = getFeatureIcon(featureId)
+                const featurePath = `/${activeSector.id}/${featureId}`
                 
-                return allSectorFeatures.map((featureId) => {
-                  const IconComponent = getFeatureIcon(featureId)
-                  const isEnabled = enabledFeatures.includes(featureId)
-                  const featurePath = `/${activeSector.id}/${featureId}`
-                  
-                  // Get feature details from the sector's features configuration
-                  const featureConfig = sectorFeatureConfig?.[featureId as keyof typeof sectorFeatureConfig]
-                  
-                  const featureName = featureConfig?.name || featureId.charAt(0).toUpperCase() + featureId.slice(1)
-                  const featureDescription = featureConfig?.description || ''
-                  
-                  return (
-                    <SidebarMenuItem key={featureId}>
-                      <SidebarMenuButton 
-                        asChild 
-                        isActive={pathname === featurePath}
-                        disabled={!isEnabled}
-                        className={!isEnabled ? 'opacity-50 cursor-not-allowed' : ''}
+                // Get feature display name from feature registry
+                const featureName = getFeatureDisplayName(featureId as any)
+                
+                return (
+                  <SidebarMenuItem key={featureId}>
+                    <SidebarMenuButton 
+                      asChild 
+                      isActive={pathname === featurePath}
+                    >
+                      <Link 
+                        href={featurePath} 
+                        title={`${featureName} for ${activeSector.name}`}
                       >
-                        <Link 
-                          href={isEnabled ? featurePath : '#'} 
-                          title={isEnabled ? featureDescription : `${featureName} is not available for ${activeSector.name}`}
-                          onClick={(e) => !isEnabled && e.preventDefault()}
-                        >
-                          <IconComponent className="mr-2 h-4 w-4" />
-                          {featureName}
-                          {!isEnabled && <span className="ml-auto text-xs text-muted-foreground">(Disabled)</span>}
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  )
-                })
-              })()}
+                        <IconComponent className="mr-2 h-4 w-4" />
+                        {featureName}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -108,7 +108,25 @@ export const useSectorStore = create<SectorStore>()(
 
       // Computed getters
       getEnabledFeatures: () => {
-        return get().activeSector.features
+        const activeSector = get().activeSector
+        // Get features from the features.ts file and filter only enabled ones
+        let enabledFeatures: readonly string[] = []
+        
+        if (activeSector.id === 'petrolBunk') {
+          enabledFeatures = Object.keys(petrolBunkFeatures).filter(
+            key => petrolBunkFeatures[key as keyof typeof petrolBunkFeatures].enabled
+          ) as readonly string[]
+        } else if (activeSector.id === 'departmentalStore') {
+          enabledFeatures = Object.keys(departmentalStoreFeatures).filter(
+            key => departmentalStoreFeatures[key as keyof typeof departmentalStoreFeatures].enabled
+          ) as readonly string[]
+        } else if (activeSector.id === 'pharmacy') {
+          enabledFeatures = Object.keys(pharmacyFeatures).filter(
+            key => pharmacyFeatures[key as keyof typeof pharmacyFeatures].enabled
+          ) as readonly string[]
+        }
+        
+        return enabledFeatures
       },
 
       getSectorSettings: () => {
