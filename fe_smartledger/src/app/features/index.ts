@@ -1,5 +1,5 @@
 // Feature exports - using dynamic imports for better performance
-export { default as ProductPage } from './product/page'
+export { default as ProductPage } from './product'
 export { default as DashboardPage } from './dashboard/page'
 export { default as InventoryPage } from './inventory/page'
 export { default as StaffPage } from './staff/page'

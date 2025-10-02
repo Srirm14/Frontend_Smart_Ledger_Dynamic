@@ -1,14 +1,25 @@
 import { memo, useMemo } from 'react'
-import SalesPage from './dashboard/page'
+import DashboardPage from './dashboard/page'
+import ProductPage from './product'
 import InventoryPage from './inventory/page'
+import StaffPage from './staff/page'
+import CustomerPage from './customer/page'
 import CreditPage from './credit/page'
+import CashflowPage from './cashflow/page'
 import TallyPage from './tally/page'
+import ReportsPage from './reports/page'
+
 // Ultra-fast feature component registry with pre-optimized components
 const FEATURE_REGISTRY = {
-  sales: memo(SalesPage),
+  dashboard: memo(DashboardPage),
+  product: memo(ProductPage),
   inventory: memo(InventoryPage),
+  staff: memo(StaffPage),
+  customer: memo(CustomerPage),
   credit: memo(CreditPage),
+  cashflow: memo(CashflowPage),
   tally: memo(TallyPage),
+  reports: memo(ReportsPage),
 } as const
 
 // Pre-warm the component registry for instant access
