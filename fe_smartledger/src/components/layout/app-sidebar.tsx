@@ -30,11 +30,9 @@ import {
   Wrench,
 } from 'lucide-react'
 import { useSectorStore } from '@/store/sector-store'
-import { petrolBunkSettings } from '@/config/sectors/petrolBunk/settings'
-import { departmentalStoreSettings } from '@/config/sectors/departmentalStore/settings'
-import { pharmacySettings } from '@/config/sectors/pharmacy/settings'
-import { getAvailableFeatures } from '@/app/features/feature-factory'
 import { getFeatureDisplayName } from '@/config/feature-registry'
+import { SectorSelector } from './sector-selector'
+import { useTheme } from '@/hooks/use-theme'
 
 // Feature data with icons
 const featureIcons = {
@@ -49,34 +47,16 @@ const featureIcons = {
   reports: BarChart3,
 } as const
 
-// Sector settings by sector
-const sectorSettings = {
-  petrolBunk: petrolBunkSettings,
-  departmentalStore: departmentalStoreSettings,
-  pharmacy: pharmacySettings,
-} as const
-
-// Sector icons
-const sectorIcons = {
-  Building2,
-  Store,
-  Pill,
-  Wrench,
-} as const
 
 export function AppSidebar() {
   const pathname = usePathname()
-  const { activeSector, availableSectors, setActiveSector, getEnabledFeatures } = useSectorStore()
+  const { activeSector, getEnabledFeatures } = useSectorStore()
+  const { isDark } = useTheme()
   
   const enabledFeatures = getEnabledFeatures()
   
-  // Debug logging
-  console.log('Active Sector:', activeSector.name)
-  console.log('Enabled Features:', enabledFeatures)
-  
-  // Use only the enabled features from the store
+  // Get enabled features for current sector
   const sectorFeatures = enabledFeatures
-  console.log('Sector Features (Enabled Only):', sectorFeatures)
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated')
@@ -84,10 +64,6 @@ export function AppSidebar() {
     window.location.href = '/login'
   }
 
-  const getSectorIcon = (iconName: string) => {
-    const IconComponent = sectorIcons[iconName as keyof typeof sectorIcons] || Building2
-    return IconComponent
-  }
 
   const getFeatureIcon = (featureId: string) => {
     const IconComponent = featureIcons[featureId as keyof typeof featureIcons] || ShoppingCart
@@ -95,26 +71,16 @@ export function AppSidebar() {
   }
 
   return (
-    <Sidebar>
-      <SidebarHeader>
-        <div className="flex items-center gap-2 px-2 py-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Building2 className="h-4 w-4" />
-          </div>
-          <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">Smart Ledger</span>
-            <span className="truncate text-xs text-muted-foreground">
-              {activeSector.name} • {enabledFeatures.length} features
-            </span>
-          </div>
-        </div>
+    <Sidebar className="bg-white dark:bg-gray-950 border-r border-gray-200 dark:border-gray-700">
+      <SidebarHeader className="border-b border-gray-200 dark:border-gray-700">
+        <SectorSelector variant="sidebar-header" />
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>All Features</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-gray-600 dark:text-gray-400 font-semibold text-sm uppercase tracking-wide px-3 py-2">Platform</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="space-y-1 px-2">
               {sectorFeatures.map((featureId) => {
                 const IconComponent = getFeatureIcon(featureId)
                 const featurePath = `/${activeSector.id}/${featureId}`
@@ -122,18 +88,45 @@ export function AppSidebar() {
                 // Get feature display name from feature registry
                 const featureName = getFeatureDisplayName(featureId as any)
                 
+                const isActive = pathname === featurePath
+                
                 return (
                   <SidebarMenuItem key={featureId}>
                     <SidebarMenuButton 
                       asChild 
-                      isActive={pathname === featurePath}
+                      isActive={isActive}
+                      className={`
+                        hover:bg-gray-100 dark:hover:bg-gray-800 
+                        ${isActive ? 'bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary/50' : ''}
+                        rounded-lg transition-all duration-200
+                      `}
                     >
                       <Link 
                         href={featurePath} 
                         title={`${featureName} for ${activeSector.name}`}
+                        className={`
+                          flex items-center px-3 py-2 rounded-lg w-full
+                          ${isActive 
+                            ? 'text-primary dark:text-primary' 
+                            : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
+                          }
+                        `}
                       >
-                        <IconComponent className="mr-2 h-4 w-4" />
-                        {featureName}
+                        <IconComponent className={`
+                          mr-2 h-4 w-4 
+                          ${isActive 
+                            ? 'text-primary dark:text-primary' 
+                            : 'text-gray-600 dark:text-gray-400'
+                          }
+                        `} />
+                        <span className={`
+                          ${isActive 
+                            ? 'text-primary dark:text-primary' 
+                            : 'text-gray-700 dark:text-gray-300'
+                          }
+                        `}>
+                          {featureName}
+                        </span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -144,12 +137,12 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="border-t border-gray-200 dark:border-gray-700">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Button variant="ghost" className="w-full justify-start">
-                <Settings className="mr-2 h-4 w-4" />
+              <Button variant="ghost" className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300">
+                <Settings className="mr-2 h-4 w-4 text-gray-600 dark:text-gray-400" />
                 Settings
               </Button>
             </SidebarMenuButton>
@@ -158,7 +151,7 @@ export function AppSidebar() {
             <SidebarMenuButton asChild>
               <Button 
                 variant="ghost" 
-                className="w-full justify-start text-red-600 hover:text-red-700"
+                className="w-full justify-start text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={handleLogout}
               >
                 <LogOut className="mr-2 h-4 w-4" />

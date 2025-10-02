@@ -40,11 +40,7 @@ const defaultSectors: Sector[] = [
     icon: petrolBunkSettings.icon,
     currency: petrolBunkSettings.currency,
     defaultTaxRate: petrolBunkSettings.defaultTaxRate,
-    features: (() => {
-      const features = Object.keys(petrolBunkFeatures) as readonly string[]
-      console.log('PetrolBunk features loaded:', features)
-      return features
-    })(),
+    features: Object.keys(petrolBunkFeatures) as readonly string[],
     settings: petrolBunkSettings,
   },
   {
@@ -70,8 +66,8 @@ const defaultSectors: Sector[] = [
 export const useSectorStore = create<SectorStore>()(
   persist(
     (set, get) => ({
-      // Initial state - default to petrol bunk
-      activeSector: defaultSectors[0], // petrolBunk
+      // Initial state - default to pharmacy
+      activeSector: defaultSectors.find(s => s.id === 'pharmacy') || defaultSectors[2], // pharmacy
       availableSectors: defaultSectors,
 
       // Actions
@@ -135,6 +131,17 @@ export const useSectorStore = create<SectorStore>()(
     }),
     {
       name: 'sector-store',
+      version: 2, // Increment version to clear old data
+      migrate: (persistedState: any, version: number) => {
+        // Force pharmacy as default on migration
+        if (version < 2) {
+          return {
+            ...persistedState,
+            activeSector: defaultSectors.find(s => s.id === 'pharmacy') || defaultSectors[2],
+          }
+        }
+        return persistedState
+      },
       partialize: (state) => ({
         activeSector: state.activeSector,
         availableSectors: state.availableSectors,

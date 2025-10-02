@@ -1,5 +1,3 @@
-// Export all style classes for easy importing
-export { styleClasses } from './tailwind.config'
 
 // Individual exports for specific categories
 export const headings = {
