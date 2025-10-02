@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import {
   SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import { Bell, Search, User } from 'lucide-react'
 import { useSectorStore } from '@/store/sector-store'
@@ -24,6 +25,7 @@ import { useTheme } from '@/hooks/use-theme'
 export function SiteHeader() {
   const pathname = usePathname()
   const { activeSector } = useSectorStore()
+  const { toggleSidebar } = useSidebar()
   const { isDark } = useTheme()
   
   // Get current page name from pathname
@@ -48,13 +50,25 @@ export function SiteHeader() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href={`/${activeSector.id}`} className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+              <BreadcrumbLink 
+                href={`/${activeSector.id}`} 
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault()
+                  toggleSidebar()
+                }}
+              >
                 Smart Ledger
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator className="hidden md:block" />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-gray-900 dark:text-gray-100">{pageName}</BreadcrumbPage>
+              <BreadcrumbPage 
+                className="text-gray-900 dark:text-gray-100 cursor-pointer"
+                onClick={toggleSidebar}
+              >
+                {pageName}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

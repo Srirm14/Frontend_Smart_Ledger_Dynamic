@@ -26,7 +26,7 @@ const sectorIcons = {
 
 interface SectorSelectorProps {
   className?: string
-  variant?: 'default' | 'compact' | 'sidebar-header'
+  variant?: 'default' | 'compact' | 'sidebar-header' | 'sidebar-header-collapsed'
 }
 
 export function SectorSelector({ className = '', variant = 'default' }: SectorSelectorProps) {
@@ -60,6 +60,35 @@ export function SectorSelector({ className = '', variant = 'default' }: SectorSe
                 <span className="text-xs text-muted-foreground">• {enabledFeatures.length} features</span>
               </div>
             </div>
+          </div>
+        </SelectTrigger>
+         <SelectContent className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg">
+           {availableSectors.map((sector) => {
+             const SectorIcon = getSectorIcon(sector.icon)
+             return (
+               <SelectItem 
+                 key={sector.id} 
+                 value={sector.id}
+                 className="hover:bg-gray-50 dark:hover:bg-gray-800 focus:bg-gray-50 dark:focus:bg-gray-800 cursor-pointer"
+               >
+                 <div className="flex items-center py-2">
+                   <SectorIcon className="mr-3 h-4 w-4 text-gray-600 dark:text-gray-400" />
+                   <span className="text-gray-900 dark:text-gray-100 font-medium">{sector.name}</span>
+                 </div>
+               </SelectItem>
+             )
+           })}
+         </SelectContent>
+      </Select>
+    )
+  }
+
+  if (variant === 'sidebar-header-collapsed') {
+    return (
+      <Select value={activeSector.id} onValueChange={setActiveSector}>
+        <SelectTrigger className={`w-auto border-0 bg-transparent p-0 h-auto hover:cursor-pointer [&>svg]:hidden ${className}`}>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <CurrentSectorIcon className="h-4 w-4" />
           </div>
         </SelectTrigger>
          <SelectContent className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg">
