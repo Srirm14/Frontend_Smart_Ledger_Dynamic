@@ -247,7 +247,7 @@ export const useSectorStore = create<SectorStore>()(
           ) as readonly string[]
         } else {
           // For other custom sectors, use the features array directly
-          enabledFeatures = activeSector.features
+          enabledFeatures = activeSector.features || []
         }
         
         return enabledFeatures

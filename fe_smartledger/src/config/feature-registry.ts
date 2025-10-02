@@ -28,15 +28,15 @@ export const isFeatureAvailable = (featureKey: string): featureKey is FeatureKey
 // Helper function to get feature display name
 export const getFeatureDisplayName = (featureKey: FeatureKey): string => {
   const displayNames: Record<FeatureKey, string> = {
-    product: 'Product Management',
-    sales: 'Sales Management',
-    inventory: 'Inventory Management',
-    staff: 'Staff Management',
-    customer: 'Customer Management',
-    credit: 'Credit Management',
-    cashflow: 'Cash Flow Management',
-    tally: 'Tally Integration',
-    reports: 'Reports & Analytics',
+    product: 'Product',
+    dashboard: 'Dashboard',
+    inventory: 'Inventory',
+    staff: 'Staff',
+    customer: 'Customer',
+    credit: 'Credit',
+    cashflow: 'Cashflow',
+    tally: 'Tally',
+    reports: 'Reports',
   }
   return displayNames[featureKey] || featureKey
 }

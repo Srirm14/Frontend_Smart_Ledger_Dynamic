@@ -18,15 +18,15 @@ export async function GET() {
             businessHours: { open: '06:00', close: '22:00' }
           },
           features: {
-            product: { enabled: false, name: 'Product Management', description: 'Manage fuel products and pricing', icon: 'ShoppingCart' },
-            sales: { enabled: true, name: 'Sales Management', description: 'Manage fuel sales and transactions', icon: 'ShoppingCart' },
-            inventory: { enabled: true, name: 'Inventory Management', description: 'Track fuel stock levels and deliveries', icon: 'Package' },
-            staff: { enabled: false, name: 'Staff Management', description: 'Manage petrol bunk staff and shifts', icon: 'Building2' },
-            customer: { enabled: false, name: 'Customer Management', description: 'Manage customer accounts and loyalty', icon: 'Building2' },
-            credit: { enabled: true, name: 'Credit Management', description: 'Manage customer credit accounts', icon: 'CreditCard' },
-            cashflow: { enabled: false, name: 'Cash Flow Management', description: 'Track daily cash flow and payments', icon: 'BarChart3' },
-            tally: { enabled: true, name: 'Tally Integration', description: 'Sync with Tally accounting software', icon: 'BarChart3' },
-            reports: { enabled: false, name: 'Reports & Analytics', description: 'Generate business reports and insights', icon: 'BarChart3' }
+            product: { enabled: false, name: 'Product', description: 'Manage fuel products and pricing', icon: 'ShoppingCart' },
+            dashboard: { enabled: true, name: 'Dashboard', description: 'Manage fuel sales and transactions', icon: 'ShoppingCart' },
+            inventory: { enabled: true, name: 'Inventory', description: 'Track fuel stock levels and deliveries', icon: 'Package' },
+            staff: { enabled: false, name: 'Staff', description: 'Manage petrol bunk staff and shifts', icon: 'Building2' },
+            customer: { enabled: false, name: 'Customer', description: 'Manage customer accounts and loyalty', icon: 'Building2' },
+            credit: { enabled: true, name: 'Credit', description: 'Manage customer credit accounts', icon: 'CreditCard' },
+            cashflow: { enabled: false, name: 'Cashflow', description: 'Track daily cash flow and payments', icon: 'BarChart3' },
+            tally: { enabled: true, name: 'Tally', description: 'Sync with Tally accounting software', icon: 'BarChart3' },
+            reports: { enabled: false, name: 'Reports', description: 'Generate business reports and insights', icon: 'BarChart3' }
           }
         },
         {
@@ -41,15 +41,15 @@ export async function GET() {
             businessHours: { open: '08:00', close: '22:00' }
           },
           features: {
-            product: { enabled: true, name: 'Medicine Management', description: 'Manage medicine inventory and prescriptions', icon: 'Pill' },
-            sales: { enabled: true, name: 'Sales Management', description: 'Track medicine sales and prescriptions', icon: 'ShoppingCart' },
-            inventory: { enabled: true, name: 'Inventory Management', description: 'Track medicine stock and expiry dates', icon: 'Package' },
-            staff: { enabled: true, name: 'Staff Management', description: 'Manage pharmacy staff and pharmacists', icon: 'Building2' },
-            customer: { enabled: true, name: 'Customer Management', description: 'Manage patient records and prescriptions', icon: 'Building2' },
-            credit: { enabled: false, name: 'Credit Management', description: 'Manage credit accounts', icon: 'CreditCard' },
-            cashflow: { enabled: true, name: 'Cash Flow Management', description: 'Track daily revenue and payments', icon: 'BarChart3' },
-            tally: { enabled: false, name: 'Tally Integration', description: 'Sync with accounting software', icon: 'BarChart3' },
-            reports: { enabled: true, name: 'Reports & Analytics', description: 'Generate pharmacy reports and insights', icon: 'BarChart3' }
+            product: { enabled: true, name: 'Product', description: 'Manage medicine inventory and prescriptions', icon: 'Pill' },
+            dashboard: { enabled: true, name: 'Dashboard', description: 'Track medicine sales and prescriptions', icon: 'ShoppingCart' },
+            inventory: { enabled: true, name: 'Inventory', description: 'Track medicine stock and expiry dates', icon: 'Package' },
+            staff: { enabled: true, name: 'Staff', description: 'Manage pharmacy staff and pharmacists', icon: 'Building2' },
+            customer: { enabled: true, name: 'Customer', description: 'Manage patient records and prescriptions', icon: 'Building2' },
+            credit: { enabled: false, name: 'Credit', description: 'Manage credit accounts', icon: 'CreditCard' },
+            cashflow: { enabled: true, name: 'Cashflow', description: 'Track daily revenue and payments', icon: 'BarChart3' },
+            tally: { enabled: false, name: 'Tally', description: 'Sync with accounting software', icon: 'BarChart3' },
+            reports: { enabled: true, name: 'Reports', description: 'Generate pharmacy reports and insights', icon: 'BarChart3' }
           }
         },
         {
@@ -64,15 +64,15 @@ export async function GET() {
             businessHours: { open: '09:00', close: '21:00' }
           },
           features: {
-            product: { enabled: true, name: 'Product Management', description: 'Manage store products and categories', icon: 'ShoppingCart' },
-            sales: { enabled: true, name: 'Sales Management', description: 'Track retail sales and transactions', icon: 'ShoppingCart' },
-            inventory: { enabled: true, name: 'Inventory Management', description: 'Track product stock and suppliers', icon: 'Package' },
-            staff: { enabled: true, name: 'Staff Management', description: 'Manage store employees and shifts', icon: 'Building2' },
-            customer: { enabled: true, name: 'Customer Management', description: 'Manage customer loyalty and accounts', icon: 'Building2' },
-            credit: { enabled: true, name: 'Credit Management', description: 'Manage customer credit accounts', icon: 'CreditCard' },
-            cashflow: { enabled: true, name: 'Cash Flow Management', description: 'Track daily revenue and expenses', icon: 'BarChart3' },
-            tally: { enabled: true, name: 'Tally Integration', description: 'Sync with accounting software', icon: 'BarChart3' },
-            reports: { enabled: true, name: 'Reports & Analytics', description: 'Generate retail reports and insights', icon: 'BarChart3' }
+            product: { enabled: true, name: 'Product', description: 'Manage store products and categories', icon: 'ShoppingCart' },
+            dashboard: { enabled: true, name: 'Dashboard', description: 'Track retail sales and transactions', icon: 'ShoppingCart' },
+            inventory: { enabled: true, name: 'Inventory', description: 'Track product stock and suppliers', icon: 'Package' },
+            staff: { enabled: true, name: 'Staff', description: 'Manage store employees and shifts', icon: 'Building2' },
+            customer: { enabled: true, name: 'Customer', description: 'Manage customer loyalty and accounts', icon: 'Building2' },
+            credit: { enabled: true, name: 'Credit', description: 'Manage customer credit accounts', icon: 'CreditCard' },
+            cashflow: { enabled: true, name: 'Cashflow', description: 'Track daily revenue and expenses', icon: 'BarChart3' },
+            tally: { enabled: true, name: 'Tally', description: 'Sync with accounting software', icon: 'BarChart3' },
+            reports: { enabled: true, name: 'Reports', description: 'Generate retail reports and insights', icon: 'BarChart3' }
           }
         }
       ]
@@ -108,15 +108,15 @@ export async function POST(request: NextRequest) {
         aiPrompt: aiPrompt || null
       },
       features: {
-        product: { enabled: selectedFeatures.includes('product'), name: 'Product Management', description: 'Manage products and pricing', icon: 'ShoppingCart' },
-        sales: { enabled: selectedFeatures.includes('sales'), name: 'Sales Management', description: 'Track sales and revenue', icon: 'ShoppingCart' },
-        inventory: { enabled: selectedFeatures.includes('inventory'), name: 'Inventory Management', description: 'Manage stock levels', icon: 'Package' },
-        staff: { enabled: selectedFeatures.includes('staff'), name: 'Staff Management', description: 'Manage employees and shifts', icon: 'Building2' },
-        customer: { enabled: selectedFeatures.includes('customer'), name: 'Customer Management', description: 'Manage customer relationships', icon: 'Building2' },
-        credit: { enabled: selectedFeatures.includes('credit'), name: 'Credit Management', description: 'Manage customer credit accounts', icon: 'CreditCard' },
-        cashflow: { enabled: selectedFeatures.includes('cashflow'), name: 'Cash Flow Management', description: 'Track daily cash flow', icon: 'BarChart3' },
-        tally: { enabled: selectedFeatures.includes('tally'), name: 'Tally Integration', description: 'Sync with Tally software', icon: 'BarChart3' },
-        reports: { enabled: selectedFeatures.includes('reports'), name: 'Reports & Analytics', description: 'Business reports and analytics', icon: 'BarChart3' }
+        product: { enabled: selectedFeatures.includes('product'), name: 'Product', description: 'Manage products and pricing', icon: 'ShoppingCart' },
+        dashboard: { enabled: selectedFeatures.includes('dashboard'), name: 'Dashboard', description: 'Track sales and revenue', icon: 'ShoppingCart' },
+        inventory: { enabled: selectedFeatures.includes('inventory'), name: 'Inventory', description: 'Manage stock levels', icon: 'Package' },
+        staff: { enabled: selectedFeatures.includes('staff'), name: 'Staff', description: 'Manage employees and shifts', icon: 'Building2' },
+        customer: { enabled: selectedFeatures.includes('customer'), name: 'Customer', description: 'Manage customer relationships', icon: 'Building2' },
+        credit: { enabled: selectedFeatures.includes('credit'), name: 'Credit', description: 'Manage customer credit accounts', icon: 'CreditCard' },
+        cashflow: { enabled: selectedFeatures.includes('cashflow'), name: 'Cashflow', description: 'Track daily cash flow', icon: 'BarChart3' },
+        tally: { enabled: selectedFeatures.includes('tally'), name: 'Tally', description: 'Sync with Tally software', icon: 'BarChart3' },
+        reports: { enabled: selectedFeatures.includes('reports'), name: 'Reports', description: 'Business reports and analytics', icon: 'BarChart3' }
       }
     }
 

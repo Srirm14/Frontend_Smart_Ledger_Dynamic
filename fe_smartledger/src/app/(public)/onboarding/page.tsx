@@ -43,15 +43,15 @@ export default function OnboardingPage() {
   }, [])
 
   const allFeatures = [
-    { id: 'product', name: 'Product Management', description: 'Manage products and pricing' },
-    { id: 'sales', name: 'Sales Management', description: 'Track sales and revenue' },
-    { id: 'inventory', name: 'Inventory Management', description: 'Manage stock levels' },
-    { id: 'staff', name: 'Staff Management', description: 'Employee management' },
-    { id: 'customer', name: 'Customer Management', description: 'Customer relationships' },
-    { id: 'credit', name: 'Credit Management', description: 'Credit tracking' },
-    { id: 'cashflow', name: 'Cash Flow Management', description: 'Track daily cash flow' },
-    { id: 'tally', name: 'Tally Integration', description: 'Sync with Tally software' },
-    { id: 'reports', name: 'Reports & Analytics', description: 'Business insights' },
+    { id: 'product', name: 'Product', description: 'Manage products and pricing' },
+    { id: 'dashboard', name: 'Dashboard', description: 'Track sales and revenue' },
+    { id: 'inventory', name: 'Inventory', description: 'Manage stock levels' },
+    { id: 'staff', name: 'Staff', description: 'Employee management' },
+    { id: 'customer', name: 'Customer', description: 'Customer relationships' },
+    { id: 'credit', name: 'Credit', description: 'Credit tracking' },
+    { id: 'cashflow', name: 'Cashflow', description: 'Track daily cash flow' },
+    { id: 'tally', name: 'Tally', description: 'Sync with Tally software' },
+    { id: 'reports', name: 'Reports', description: 'Business insights' },
   ]
 
   // Simplified AI prompt handling
@@ -68,8 +68,8 @@ export default function OnboardingPage() {
         setSelectedFeatures(data.suggestedFeatures.map((f: any) => f.id))
       } catch (error) {
         // Fallback to simple mock
-        setAiResponse("Based on your business needs, I recommend starting with core features: Sales Management, Inventory Management, and Reports & Analytics.")
-        setSelectedFeatures(['sales', 'inventory', 'reports'])
+        setAiResponse("Based on your business needs, I recommend starting with core features: Dashboard, Inventory, and Reports.")
+        setSelectedFeatures(['dashboard', 'inventory', 'reports'])
       }
     }
   }
@@ -92,11 +92,11 @@ export default function OnboardingPage() {
         )
         setSelectedFeatures(enabledFeatures)
       } else {
-        setSelectedFeatures(['sales', 'inventory']) // Fallback
+        setSelectedFeatures(['dashboard', 'inventory']) // Fallback
       }
     } catch (error) {
       console.error('Failed to load features:', error)
-      setSelectedFeatures(['sales', 'inventory']) // Fallback
+      setSelectedFeatures(['dashboard', 'inventory']) // Fallback
     }
   }
 
@@ -228,24 +228,33 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Welcome to Smart Ledger
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300">
-            Choose your business type or describe your needs with AI
-          </p>
+    <div className="min-h-screen bg-white">
+      {/* Header Section */}
+      <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white py-12">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-4">
+              Welcome to Smart Ledger
+            </h1>
+            <p className="text-primary-100 text-lg max-w-2xl mx-auto">
+              Choose your business type or describe your needs with AI to get started
+            </p>
+          </div>
         </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-4 py-12">
 
         {step === 'sectors' && (
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Default Sectors */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Choose from Popular Business Types</CardTitle>
-                <CardDescription>
+            <Card className="shadow-lg border-0 bg-white">
+              <CardHeader className="pb-6">
+                <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+                  Choose from Popular Business Types
+                </CardTitle>
+                <CardDescription className="text-gray-600 text-base">
                   Select a pre-configured sector for your business
                 </CardDescription>
               </CardHeader>
@@ -255,16 +264,18 @@ export default function OnboardingPage() {
                   return (
                     <div
                       key={sector.id}
-                      className="p-4 border rounded-lg cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                      className="p-6 border border-gray-200 rounded-xl cursor-pointer hover:border-primary-300 hover:bg-primary-50 hover:shadow-md transition-all duration-200 group"
                       onClick={() => handleSectorSelect(sector.id)}
                     >
-                      <div className="flex items-center gap-3">
-                        <IconComponent className="w-8 h-8 text-blue-600" />
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-primary-100 rounded-lg group-hover:bg-primary-200 transition-colors">
+                          <IconComponent className="w-6 h-6 text-primary-600" />
+                        </div>
                         <div>
-                          <h3 className="font-semibold text-gray-900 dark:text-white">
+                          <h3 className="font-semibold text-gray-900 text-lg mb-1">
                             {sector.name}
                           </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                          <p className="text-gray-600">
                             {sector.description}
                           </p>
                         </div>
@@ -276,48 +287,54 @@ export default function OnboardingPage() {
             </Card>
 
             {/* AI Chat Section */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5" />
+            <Card className="shadow-lg border-0 bg-white">
+              <CardHeader className="pb-6">
+                <CardTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900 mb-2">
+                  <div className="p-2 bg-primary-100 rounded-lg">
+                    <MessageSquare className="w-6 h-6 text-primary-600" />
+                  </div>
                   AI-Powered Setup
-          </CardTitle>
-                <CardDescription>
+                </CardTitle>
+                <CardDescription className="text-gray-600 text-base">
                   Describe your business and get AI recommendations
-          </CardDescription>
-        </CardHeader>
-              <CardContent className="space-y-4">
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
                 <div>
-                  <Label htmlFor="customPrompt">Describe your business</Label>
+                  <Label htmlFor="customPrompt" className="text-gray-900 font-medium text-base mb-3 block">
+                    Describe your business
+                  </Label>
                   <Textarea
                     id="customPrompt"
                     placeholder="e.g., I run a bakery that sells bread, cakes, and coffee. I need to track sales, manage inventory, and handle staff scheduling."
                     value={customPrompt}
                     onChange={(e) => setCustomPrompt(e.target.value)}
                     rows={4}
+                    className="border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-lg"
                   />
                 </div>
-                <Button onClick={handleAIPrompt} className="w-full">
+                <Button 
+                  onClick={handleAIPrompt} 
+                  className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 rounded-lg transition-colors"
+                >
                   Get AI Recommendations
                 </Button>
                 
                 {aiResponse && (
-                  <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-                    <h4 className="font-semibold text-green-800 dark:text-green-200 mb-2">
+                  <div className="p-6 bg-primary-50 border border-primary-200 rounded-xl">
+                    <h4 className="font-semibold text-primary-800 mb-3 text-lg">
                       AI Recommendations:
                     </h4>
-                    <p className="text-green-700 dark:text-green-300 text-sm">
+                    <p className="text-primary-700 mb-4">
                       {aiResponse}
                     </p>
-                    <div className="mt-3">
-                      <Button 
-                        size="sm" 
-                        onClick={() => setStep('setup')}
-                        className="bg-green-600 hover:bg-green-700"
-                      >
-                        Use These Recommendations
-                      </Button>
-                    </div>
+                    <Button 
+                      size="sm" 
+                      onClick={() => setStep('setup')}
+                      className="bg-primary-600 hover:bg-primary-700 text-white"
+                    >
+                      Use These Recommendations
+                    </Button>
                   </div>
                 )}
               </CardContent>
@@ -326,87 +343,106 @@ export default function OnboardingPage() {
         )}
 
         {step === 'setup' && (
-          <Card className="max-w-4xl mx-auto">
-            <CardHeader>
-              <CardTitle>Customize Your Features</CardTitle>
-              <CardDescription>
+          <Card className="max-w-5xl mx-auto shadow-lg border-0 bg-white">
+            <CardHeader className="pb-6">
+              <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+                Customize Your Features
+              </CardTitle>
+              <CardDescription className="text-gray-600 text-base">
                 Review and modify the recommended features for your business
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {allFeatures.map((feature) => (
                   <div
                     key={feature.id}
-                    className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                    className={`p-6 border rounded-xl cursor-pointer transition-all duration-200 ${
                       selectedFeatures.includes(feature.id)
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                        ? 'border-primary-300 bg-primary-50 shadow-md'
+                        : 'border-gray-200 hover:border-primary-200 hover:shadow-sm'
                     }`}
                     onClick={() => handleFeatureToggle(feature.id)}
                   >
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-start gap-3 mb-3">
                       {selectedFeatures.includes(feature.id) && (
-                        <CheckCircle className="w-4 h-4 text-blue-600" />
+                        <CheckCircle className="w-5 h-5 text-primary-600 mt-0.5" />
                       )}
-                      <h3 className="font-semibold text-gray-900 dark:text-white">
-                        {feature.name}
-                      </h3>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900 text-lg mb-2">
+                          {feature.name}
+                        </h3>
+                        <p className="text-gray-600">
+                          {feature.description}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
-                      {feature.description}
-                    </p>
                   </div>
                 ))}
               </div>
-              <div className="flex gap-4">
-                <Button variant="outline" onClick={() => setStep('sectors')}>
+              <div className="flex gap-4 pt-6 border-t border-gray-200">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setStep('sectors')}
+                  className="px-8 py-3 border-gray-300 text-gray-700 hover:bg-gray-50"
+                >
                   Back
-            </Button>
-            <Button 
+                </Button>
+                <Button 
                   onClick={handleCreateLedger} 
                   disabled={selectedFeatures.length === 0}
-                  className="flex-1"
+                  className="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-8 disabled:bg-gray-300"
                 >
                   Create My Ledger ({selectedFeatures.length} features)
-            </Button>
-          </div>
+                </Button>
+              </div>
             </CardContent>
           </Card>
         )}
 
         {step === 'complete' && (
-          <Card className="max-w-2xl mx-auto">
-            <CardHeader>
-              <CardTitle className="text-center">🎉 Setup Complete!</CardTitle>
-              <CardDescription className="text-center">
-                Your Smart Ledger is ready to use
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <Card className="max-w-3xl mx-auto shadow-lg border-0 bg-white">
+            <CardHeader className="pb-6">
               <div className="text-center">
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="w-8 h-8 text-primary-600" />
+                </div>
+                <CardTitle className="text-3xl font-bold text-gray-900 mb-2">
+                  Setup Complete!
+                </CardTitle>
+                <CardDescription className="text-gray-600 text-lg">
+                  Your Smart Ledger is ready to use
+                </CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="text-center">
+                <p className="text-gray-600 mb-6 text-lg">
                   You've selected {selectedFeatures.length} features:
                 </p>
-                <div className="flex flex-wrap justify-center gap-2">
+                <div className="flex flex-wrap justify-center gap-3">
                   {selectedFeatures.map(featureId => {
                     const feature = allFeatures.find(f => f.id === featureId)
                     return (
                       <span
                         key={featureId}
-                        className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full text-sm"
+                        className="px-4 py-2 bg-primary-100 text-primary-800 rounded-full text-sm font-medium"
                       >
                         {feature?.name}
                       </span>
                     )
                   })}
                 </div>
-          </div>
-              <Button onClick={handleStartApp} className="w-full" size="lg">
+              </div>
+              <Button 
+                onClick={handleStartApp} 
+                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-4 text-lg rounded-lg"
+                size="lg"
+              >
                 Start Using Smart Ledger
               </Button>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
         )}
       </div>
     </div>

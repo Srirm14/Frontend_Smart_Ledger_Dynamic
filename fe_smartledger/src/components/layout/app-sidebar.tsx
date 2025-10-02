@@ -19,8 +19,12 @@ import {
 import {
   LayoutDashboard,
   ShoppingCart,
-  Package,
-  CreditCard,
+  Box,
+  Briefcase,
+  IndianRupee,
+  Users,
+  UsersRound,
+  Banknote,
   BarChart3,
   Settings,
   Building2,
@@ -38,13 +42,13 @@ import { useTheme } from '@/hooks/use-theme'
 // Feature data with icons
 const featureIcons = {
   product: ShoppingCart,
-  sales: ShoppingCart,
-  inventory: Package,
-  staff: Building2,
-  customer: Building2,
-  credit: CreditCard,
-  cashflow: BarChart3,
-  tally: BarChart3,
+  dashboard: ShoppingCart,
+  inventory: Box,
+  staff: UsersRound,
+  customer: Users,
+  credit: IndianRupee,
+  cashflow: Banknote,
+  tally: Briefcase,
   reports: BarChart3,
 } as const
 

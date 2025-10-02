@@ -25,7 +25,7 @@ export interface FeatureConfig {
 export const FEATURE_REGISTRY = {
   product: {
     component: 'ProductPage',
-    title: 'Product Management',
+    title: 'Product',
     description: 'Manage your product catalog and pricing',
     stats: [
       { label: "Total Products", value: "0", subtext: "active products", color: "text-blue-600" },
@@ -33,9 +33,9 @@ export const FEATURE_REGISTRY = {
       { label: "Low Stock", value: "0", subtext: "items", color: "text-orange-600" }
     ]
   },
-  sales: {
-    component: 'SalesPage',
-    title: 'Sales Management',
+  dashboard: {
+    component: 'DashboardPage',
+    title: 'Dashboard',
     description: 'Manage your sales transactions and customer orders',
     stats: [
       { label: "Today's Sales", value: "₹0", subtext: "0 transactions", color: "text-green-600" },
@@ -45,7 +45,7 @@ export const FEATURE_REGISTRY = {
   },
   inventory: {
     component: 'InventoryPage',
-    title: 'Inventory Management',
+    title: 'Inventory',
     description: 'Track and manage your inventory levels',
     stats: [
       { label: "Total Items", value: "0", subtext: "products", color: "text-blue-600" },
@@ -55,7 +55,7 @@ export const FEATURE_REGISTRY = {
   },
   staff: {
     component: 'StaffPage',
-    title: 'Staff Management',
+    title: 'Staff',
     description: 'Manage your team members and their roles',
     stats: [
       { label: "Total Staff", value: "0", subtext: "employees", color: "text-blue-600" },
@@ -65,7 +65,7 @@ export const FEATURE_REGISTRY = {
   },
   customer: {
     component: 'CustomerPage',
-    title: 'Customer Management',
+    title: 'Customer',
     description: 'Manage your customer relationships and data',
     stats: [
       { label: "Total Customers", value: "0", subtext: "customers", color: "text-blue-600" },
@@ -75,7 +75,7 @@ export const FEATURE_REGISTRY = {
   },
   credit: {
     component: 'CreditPage',
-    title: 'Credit Management',
+    title: 'Credit',
     description: 'Manage customer credit accounts and payments',
     stats: [
       { label: "Outstanding Credit", value: "₹0", subtext: "pending payments", color: "text-red-600" },
@@ -85,7 +85,7 @@ export const FEATURE_REGISTRY = {
   },
   cashflow: {
     component: 'CashFlowPage',
-    title: 'Cash Flow Management',
+    title: 'Cashflow',
     description: 'Track your business cash flow and financial health',
     stats: [
       { label: "Cash In", value: "₹0", subtext: "received", color: "text-green-600" },
@@ -95,7 +95,7 @@ export const FEATURE_REGISTRY = {
   },
   tally: {
     component: 'TallyPage',
-    title: 'Tally Integration',
+    title: 'Tally',
     description: 'Connect and sync with Tally accounting software',
     stats: [
       { label: "Connection Status", value: "❌", subtext: "Not connected", color: "text-red-600" },
@@ -105,7 +105,7 @@ export const FEATURE_REGISTRY = {
   },
   reports: {
     component: 'ReportsPage',
-    title: 'Reports & Analytics',
+    title: 'Reports',
     description: 'Generate comprehensive business reports and insights',
     stats: [
       { label: "Sales Reports", value: "0", subtext: "reports generated", color: "text-green-600" },

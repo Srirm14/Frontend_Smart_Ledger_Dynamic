@@ -10,5 +10,5 @@ export const departmentalStoreSettings = {
     open: '08:00',
     close: '21:00',
   },
-  features: ['product', 'sales', 'inventory', 'staff', 'customer', 'credit', 'cashflow', 'reports'],
+  features: ['product', 'dashboard', 'inventory', 'staff', 'customer', 'credit', 'cashflow', 'reports'],
 } as const
