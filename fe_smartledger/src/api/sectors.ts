@@ -53,8 +53,8 @@ export async function GET() {
           }
         },
         {
-          id: 'departmentalStore',
-          name: 'Departmental Store',
+          id: 'departmental',
+          name: 'Departmental',
           icon: 'Store',
           currency: 'INR',
           defaultTaxRate: 0.18,

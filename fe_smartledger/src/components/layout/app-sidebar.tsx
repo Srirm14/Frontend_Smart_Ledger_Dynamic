@@ -42,7 +42,7 @@ import { useTheme } from '@/hooks/use-theme'
 // Feature data with icons
 const featureIcons = {
   product: ShoppingCart,
-  dashboard: ShoppingCart,
+  dashboard: LayoutDashboard,
   inventory: Box,
   staff: UsersRound,
   customer: Users,
@@ -89,14 +89,22 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
             <SidebarMenu className="space-y-1 px-2 group-data-[collapsible=icon]:px-0">
-              {sectorFeatures.map((featureId) => {
-                const IconComponent = getFeatureIcon(featureId)
-                const featurePath = `/${activeSector.id}/${featureId}`
+              {(() => {
+                // Always show Dashboard first if it's enabled
+                const sortedFeatures = [...sectorFeatures].sort((a, b) => {
+                  if (a === 'dashboard') return -1
+                  if (b === 'dashboard') return 1
+                  return 0
+                })
                 
-                // Get feature display name from feature registry
-                const featureName = getFeatureDisplayName(featureId as any)
-                
-                const isActive = pathname === featurePath
+                return sortedFeatures.map((featureId) => {
+                  const IconComponent = getFeatureIcon(featureId)
+                  const featurePath = `/${activeSector.id}/${featureId}`
+                  
+                  // Get feature display name from feature registry
+                  const featureName = getFeatureDisplayName(featureId as any)
+                  
+                  const isActive = pathname === featurePath
                 
                 return (
                   <SidebarMenuItem key={featureId} className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
@@ -146,7 +154,8 @@ export function AppSidebar() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 )
-              })}
+                })
+              })()}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

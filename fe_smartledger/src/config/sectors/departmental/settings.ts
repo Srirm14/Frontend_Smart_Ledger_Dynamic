@@ -1,5 +1,5 @@
 // settings.ts - Sector constants/config
-export const departmentalStoreSettings = {
+export const departmentalSettings = {
   name: 'Departmental',
   icon: 'Store',
   currency: 'INR',

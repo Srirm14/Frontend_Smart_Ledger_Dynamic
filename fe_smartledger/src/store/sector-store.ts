@@ -1,12 +1,12 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { petrolBunkSettings } from '@/config/sectors/petrolBunk/settings'
-import { departmentalStoreSettings } from '@/config/sectors/departmentalStore/settings'
+import { departmentalSettings } from '@/config/sectors/departmental/settings'
 import { pharmacySettings } from '@/config/sectors/pharmacy/settings'
 import { petrolBunkFeatures } from '@/config/sectors/petrolBunk/features'
-import { departmentalStoreFeatures } from '@/config/sectors/departmentalStore/features'
+import { departmentalFeatures } from '@/config/sectors/departmental/features'
 import { pharmacyFeatures } from '@/config/sectors/pharmacy/features'
-import { SectorDefinition, AISuggestion, SectorMigration } from '@/types'
+import { AISuggestion, SectorMigration } from '@/types'
 // Direct API calls to server-side endpoints
 
 export interface Sector {
@@ -56,13 +56,13 @@ const defaultSectors: Sector[] = [
     settings: petrolBunkSettings,
   },
   {
-    id: 'departmentalStore',
-    name: departmentalStoreSettings.name,
-    icon: departmentalStoreSettings.icon,
-    currency: departmentalStoreSettings.currency,
-    defaultTaxRate: departmentalStoreSettings.defaultTaxRate,
-    features: Object.keys(departmentalStoreFeatures) as readonly string[],
-    settings: departmentalStoreSettings,
+    id: 'departmental',
+    name: departmentalSettings.name,
+    icon: departmentalSettings.icon,
+    currency: departmentalSettings.currency,
+    defaultTaxRate: departmentalSettings.defaultTaxRate,
+    features: Object.keys(departmentalFeatures) as readonly string[],
+    settings: departmentalSettings,
   },
   {
     id: 'pharmacy',
@@ -237,9 +237,9 @@ export const useSectorStore = create<SectorStore>()(
           enabledFeatures = Object.keys(petrolBunkFeatures).filter(
             key => petrolBunkFeatures[key as keyof typeof petrolBunkFeatures].enabled
           ) as readonly string[]
-        } else if (activeSector.id === 'departmentalStore') {
-          enabledFeatures = Object.keys(departmentalStoreFeatures).filter(
-            key => departmentalStoreFeatures[key as keyof typeof departmentalStoreFeatures].enabled
+        } else if (activeSector.id === 'departmental') {
+          enabledFeatures = Object.keys(departmentalFeatures).filter(
+            key => departmentalFeatures[key as keyof typeof departmentalFeatures].enabled
           ) as readonly string[]
         } else if (activeSector.id === 'pharmacy') {
           enabledFeatures = Object.keys(pharmacyFeatures).filter(
@@ -271,13 +271,22 @@ export const useSectorStore = create<SectorStore>()(
     }),
     {
       name: 'sector-store',
-      version: 2, // Increment version to clear old data
+      version: 3, // Increment version to clear old data
       migrate: (persistedState: any, version: number) => {
         // Force pharmacy as default on migration
         if (version < 2) {
           return {
             ...persistedState,
             activeSector: defaultSectors.find(s => s.id === 'pharmacy') || defaultSectors[2],
+          }
+        }
+        // For version 3, refresh sector data to get updated names
+        if (version < 3) {
+          return {
+            ...persistedState,
+            availableSectors: defaultSectors,
+            // Keep current active sector but refresh its data
+            activeSector: defaultSectors.find(s => s.id === persistedState.activeSector?.id) || defaultSectors[0],
           }
         }
         return persistedState

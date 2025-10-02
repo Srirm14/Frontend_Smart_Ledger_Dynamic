@@ -1,5 +1,5 @@
 // features.ts - Features enabled for departmental store
-export const departmentalStoreFeatures = {
+export const departmentalFeatures = {
   product: {
     enabled: true,
     name: 'Product',
@@ -50,4 +50,4 @@ export const departmentalStoreFeatures = {
   },
 } as const
 
-export type DepartmentalStoreFeatureKey = keyof typeof departmentalStoreFeatures
+export type departmentalFeatureKey = keyof typeof departmentalFeatures
