@@ -18,7 +18,7 @@ export default function SectorLayout({
   const router = useRouter()
   const params = useParams()
   const sectorId = params.sector as string
-  const { setActiveSector, availableSectors } = useSectorStore()
+  const { setActiveSector, availableSectors, customSectors, getAllSectors } = useSectorStore()
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -30,8 +30,9 @@ export default function SectorLayout({
       return
     }
 
-    // Set active sector based on URL
-    const sector = availableSectors.find(s => s.id === sectorId)
+    // Set active sector based on URL - check both available and custom sectors
+    const allSectors = getAllSectors()
+    const sector = allSectors.find(s => s.id === sectorId)
     if (sector) {
       setActiveSector(sectorId)
     } else {
@@ -41,7 +42,7 @@ export default function SectorLayout({
     }
     
     setIsLoading(false)
-  }, [router, sectorId, setActiveSector, availableSectors])
+  }, [router, sectorId, setActiveSector, getAllSectors])
 
   if (isLoading) {
     return (

@@ -6,6 +6,8 @@ import { pharmacySettings } from '@/config/sectors/pharmacy/settings'
 import { petrolBunkFeatures } from '@/config/sectors/petrolBunk/features'
 import { departmentalStoreFeatures } from '@/config/sectors/departmentalStore/features'
 import { pharmacyFeatures } from '@/config/sectors/pharmacy/features'
+import { SectorDefinition, AISuggestion, SectorMigration } from '@/types'
+// Direct API calls to server-side endpoints
 
 export interface Sector {
   id: string
@@ -21,15 +23,25 @@ export interface SectorStore {
   // State
   activeSector: Sector
   availableSectors: Sector[]
+  customSectors: Sector[]
+  aiSuggestions: AISuggestion[]
+  migrations: SectorMigration[]
+  isLoading: boolean
+  error: string | null
   
   // Actions
   setActiveSector: (sectorId: string) => void
-  addCustomSector: (sector: Omit<Sector, 'id'>) => void
+  addCustomSector: (sector: Sector) => void
   updateSectorSettings: (sectorId: string, settings: Record<string, any>) => void
+  syncWithBackend: () => Promise<void>
+  applyAISuggestion: (suggestionId: string) => Promise<void>
+  generateAISuggestions: (prompt: string) => Promise<void>
   
   // Computed
   getEnabledFeatures: () => readonly string[]
   getSectorSettings: () => Record<string, any>
+  getAllSectors: () => Sector[]
+  getAISuggestions: (sectorId?: string) => AISuggestion[]
 }
 
 // Default sectors configuration - using features from features.ts files
@@ -69,24 +81,33 @@ export const useSectorStore = create<SectorStore>()(
       // Initial state - default to pharmacy
       activeSector: defaultSectors.find(s => s.id === 'pharmacy') || defaultSectors[2], // pharmacy
       availableSectors: defaultSectors,
+      customSectors: [],
+      aiSuggestions: [],
+      migrations: [],
+      isLoading: false,
+      error: null,
 
       // Actions
       setActiveSector: (sectorId: string) => {
-        const sector = get().availableSectors.find(s => s.id === sectorId)
+        const allSectors = [...get().availableSectors, ...get().customSectors]
+        const sector = allSectors.find(s => s.id === sectorId)
         if (sector) {
           set({ activeSector: sector })
+          // Sync with backend
+          get().syncWithBackend()
         }
       },
 
-      addCustomSector: (sectorData: Omit<Sector, 'id'>) => {
+      addCustomSector: (sectorData: Sector) => {
         const newSector: Sector = {
-          id: `custom_${Date.now()}`,
           ...sectorData,
         }
-        set(state => ({
-          availableSectors: [...state.availableSectors, newSector],
+        set(state => ({ 
+          customSectors: [...state.customSectors, newSector],
           activeSector: newSector,
         }))
+        // Sync with backend
+        get().syncWithBackend()
       },
 
       updateSectorSettings: (sectorId: string, settings: Record<string, any>) => {
@@ -96,16 +117,120 @@ export const useSectorStore = create<SectorStore>()(
               ? { ...sector, settings: { ...sector.settings, ...settings } }
               : sector
           ),
+          customSectors: state.customSectors.map(sector =>
+            sector.id === sectorId
+              ? { ...sector, settings: { ...sector.settings, ...settings } }
+              : sector
+          ),
           activeSector: state.activeSector.id === sectorId
             ? { ...state.activeSector, settings: { ...state.activeSector.settings, ...settings } }
             : state.activeSector,
         }))
+        // Sync with backend
+        get().syncWithBackend()
+      },
+
+      syncWithBackend: async () => {
+        try {
+          set({ isLoading: true, error: null })
+          
+          // Simulate API delay
+          await new Promise(resolve => setTimeout(resolve, 100))
+          
+          set({ 
+            isLoading: false
+          })
+        } catch (error) {
+          set({ 
+            isLoading: false, 
+            error: error instanceof Error ? error.message : 'Sync failed' 
+          })
+        }
+      },
+
+      applyAISuggestion: async (suggestionId: string) => {
+        try {
+          set({ isLoading: true, error: null })
+          
+          const suggestion = get().aiSuggestions.find(s => s.timestamp.toString() === suggestionId)
+          if (!suggestion) {
+            throw new Error('Suggestion not found')
+          }
+
+          const response = await fetch('/api/ai/apply-suggestion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ suggestionId, suggestion })
+          })
+
+          if (!response.ok) {
+            throw new Error('Failed to apply AI suggestion')
+          }
+
+          const result = await response.json()
+          
+          // Update local state
+          set(state => ({
+            aiSuggestions: state.aiSuggestions.map(s => 
+              s.timestamp.toString() === suggestionId 
+                ? { ...s, applied: true }
+                : s
+            ),
+            isLoading: false
+          }))
+
+          // Refresh sector data
+          get().syncWithBackend()
+        } catch (error) {
+          set({ 
+            isLoading: false, 
+            error: error instanceof Error ? error.message : 'Failed to apply suggestion' 
+          })
+        }
+      },
+
+      generateAISuggestions: async (prompt: string) => {
+        try {
+          set({ isLoading: true, error: null })
+          
+          const response = await fetch('/api/ai/generate-suggestions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              prompt, 
+              activeSector: get().activeSector,
+              context: 'sector-optimization'
+            })
+          })
+
+          if (!response.ok) {
+            throw new Error('Failed to generate AI suggestions')
+          }
+
+          const suggestions: AISuggestion[] = await response.json()
+          
+          set(state => ({
+            aiSuggestions: [...state.aiSuggestions, ...suggestions],
+            isLoading: false
+          }))
+        } catch (error) {
+          set({ 
+            isLoading: false, 
+            error: error instanceof Error ? error.message : 'Failed to generate suggestions' 
+          })
+        }
       },
 
       // Computed getters
       getEnabledFeatures: () => {
         const activeSector = get().activeSector
-        // Get features from the features.ts file and filter only enabled ones
+        
+        // Check if this is a custom sector with user-selected features
+        if (activeSector.settings?.customFeatures) {
+          return activeSector.settings.customFeatures as readonly string[]
+        }
+        
+        // For predefined sectors, get features from config files
         let enabledFeatures: readonly string[] = []
         
         if (activeSector.id === 'petrolBunk') {
@@ -120,6 +245,9 @@ export const useSectorStore = create<SectorStore>()(
           enabledFeatures = Object.keys(pharmacyFeatures).filter(
             key => pharmacyFeatures[key as keyof typeof pharmacyFeatures].enabled
           ) as readonly string[]
+        } else {
+          // For other custom sectors, use the features array directly
+          enabledFeatures = activeSector.features
         }
         
         return enabledFeatures
@@ -127,6 +255,18 @@ export const useSectorStore = create<SectorStore>()(
 
       getSectorSettings: () => {
         return get().activeSector.settings
+      },
+
+      getAllSectors: () => {
+        return [...get().availableSectors, ...get().customSectors]
+      },
+
+      getAISuggestions: (sectorId?: string) => {
+        const suggestions = get().aiSuggestions
+        if (sectorId) {
+          return suggestions.filter(s => s.type === 'sector' || s.type === 'feature')
+        }
+        return suggestions
       },
     }),
     {

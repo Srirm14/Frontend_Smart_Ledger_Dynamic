@@ -1,6 +1,6 @@
 // settings.ts - Sector constants/config
 export const departmentalStoreSettings = {
-  name: 'Departmental Store',
+  name: 'Departmental',
   icon: 'Store',
   currency: 'INR',
   defaultTaxRate: 0.18, // 18% GST
