@@ -1,9 +1,9 @@
 // Feature registry for dynamic module loading
 export const featureRegistry = {
-  sales: () => import('../features/sales'),
-  inventory: () => import('../features/inventory'),
-  credit: () => import('../features/credit'),
-  tally: () => import('../features/tally'),
+  sales: () => import('../app/features/sales/page'),
+  inventory: () => import('../app/features/inventory'),
+  credit: () => import('../app/features/credit'),
+  tally: () => import('../app/features/tally'),
 } as const
 
 export type FeatureKey = keyof typeof featureRegistry

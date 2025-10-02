@@ -4,7 +4,7 @@ import { memo } from 'react'
 // Ultra-fast memoized sales page - only re-renders when props change
 const SalesPage = memo(function SalesPage() {
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Sales Management</h1>
         <p className="text-gray-600 mt-2">Manage your sales transactions and customer orders</p>

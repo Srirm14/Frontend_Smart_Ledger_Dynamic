@@ -55,6 +55,29 @@ function InventoryPage() {
             <p className="text-sm text-gray-400 mt-2">This will include stock tracking, purchase orders, and inventory reports</p>
           </div>
         </CardContent>
+
+        <CardContent>
+          <div className="text-center py-8">
+            <p className="text-gray-500">Inventory management features coming soon...</p>
+            <p className="text-sm text-gray-400 mt-2">This will include stock tracking, purchase orders, and inventory reports</p>
+          </div>
+        </CardContent>
+
+
+        <CardContent>
+          <div className="text-center py-8">
+            <p className="text-gray-500">Inventory management features coming soon...</p>
+            <p className="text-sm text-gray-400 mt-2">This will include stock tracking, purchase orders, and inventory reports</p>
+          </div>
+        </CardContent>
+
+
+        <CardContent>
+          <div className="text-center py-8">
+            <p className="text-gray-500">Inventory management features coming soon...</p>
+            <p className="text-sm text-gray-400 mt-2">This will include stock tracking, purchase orders, and inventory reports</p>
+          </div>
+        </CardContent>
       </Card>
     </div>
   )

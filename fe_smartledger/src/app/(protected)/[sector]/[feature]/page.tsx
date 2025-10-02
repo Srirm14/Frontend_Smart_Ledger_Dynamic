@@ -18,12 +18,12 @@ const FeatureRenderer = memo(function FeatureRenderer({
 
   // Fallback for unknown features
   return (
-    <div className="space-y-6">
-      <div className="col-span-full">
+    <div className="w-full space-y-6">
+      <div className="w-full">
         <h1 className="text-3xl font-bold text-gray-900">Feature Not Found</h1>
         <p className="text-gray-600 mt-2">This feature is not available for {sectorName}</p>
       </div>
-      <Card className="col-span-full">
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Feature Not Found</CardTitle>
           <CardDescription>This feature is not available</CardDescription>
@@ -57,8 +57,8 @@ export default async function FeaturePage({
 
   if (!isValidFeature || !isFeatureEnabled) {
     return (
-      <div className="col-span-full">
-        <Card>
+      <div className="w-full">
+        <Card className="w-full">
           <CardHeader>
             <CardTitle>Feature Not Available</CardTitle>
             <CardDescription>
