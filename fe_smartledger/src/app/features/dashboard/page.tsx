@@ -1,8 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { memo } from 'react'
 
-// Ultra-fast memoized sales page - only re-renders when props change
-const SalesPage = memo(function SalesPage() {
+// Optimized dashboard page
+const DashboardPage = memo(function DashboardPage() {
   return (
     <div className="w-full space-y-6">
       <div>
@@ -14,7 +14,7 @@ const SalesPage = memo(function SalesPage() {
         <Card>
           <CardHeader>
             <CardTitle>Today's Sales</CardTitle>
-            <CardDescription>Current day transactions</CardDescription>
+            <CardDescription>Sales made today</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold text-green-600">₹0</p>
@@ -25,7 +25,7 @@ const SalesPage = memo(function SalesPage() {
         <Card>
           <CardHeader>
             <CardTitle>This Month</CardTitle>
-            <CardDescription>Monthly sales summary</CardDescription>
+            <CardDescription>Sales this month</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold text-blue-600">₹0</p>
@@ -36,7 +36,7 @@ const SalesPage = memo(function SalesPage() {
         <Card>
           <CardHeader>
             <CardTitle>Total Customers</CardTitle>
-            <CardDescription>Active customer count</CardDescription>
+            <CardDescription>Registered customers</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold text-purple-600">0</p>
@@ -47,13 +47,13 @@ const SalesPage = memo(function SalesPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Sales Features</CardTitle>
-          <CardDescription>Available sales management tools</CardDescription>
+          <CardTitle>Dashboard Features</CardTitle>
+          <CardDescription>Available dashboard tools</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <p className="text-gray-500">Sales management features coming soon...</p>
-            <p className="text-sm text-gray-400 mt-2">This will include transaction recording, customer management, and reporting</p>
+            <p className="text-gray-500">Dashboard features coming soon...</p>
+            <p className="text-sm text-gray-400 mt-2">This will include sales analytics, order management, and customer insights</p>
           </div>
         </CardContent>
       </Card>
@@ -61,4 +61,4 @@ const SalesPage = memo(function SalesPage() {
   )
 })
 
-export default SalesPage
+export default DashboardPage

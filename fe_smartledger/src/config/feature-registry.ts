@@ -1,7 +1,7 @@
 // Feature registry for dynamic module loading
 export const featureRegistry = {
   product: () => import('../app/features/product'),
-  sales: () => import('../app/features/sales/page'),
+  dashboard: () => import('../app/features/dashboard'),
   inventory: () => import('../app/features/inventory'),
   staff: () => import('../app/features/staff'),
   customer: () => import('../app/features/customer'),

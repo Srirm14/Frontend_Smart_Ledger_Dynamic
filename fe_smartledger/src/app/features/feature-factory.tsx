@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import SalesPage from './sales/page'
+import SalesPage from './dashboard/page'
 import InventoryPage from './inventory/page'
 import CreditPage from './credit/page'
 import TallyPage from './tally/page'
