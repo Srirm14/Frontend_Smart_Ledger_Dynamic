@@ -16,10 +16,10 @@ import {
   SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { Bell, Search, User } from 'lucide-react'
+// Removed unused imports
 import { useSectorStore } from '@/store/sector-store'
 import { SectorSelector } from './sector-selector'
-import { ThemeToggle } from './theme-toggle'
+import { SmartDatePicker } from '@/components/shared/smartDatePicker'
 import { useTheme } from '@/hooks/use-theme'
 
 export function SiteHeader() {
@@ -76,36 +76,7 @@ export function SiteHeader() {
       
       {/* Right side - Search and User actions */}
       <div className="flex items-center gap-4 ml-auto px-4">
-        {/* Search */}
-        <div className="relative hidden md:block">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 h-4 w-4" />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent w-64"
-          />
-        </div>
-
-        {/* Notifications */}
-        <Button variant="ghost" size="sm" className="hover:bg-gray-100 dark:hover:bg-gray-800">
-          <Bell className="h-4 w-4" />
-        </Button>
-
-        {/* Theme Toggle */}
-        <ThemeToggle />
-
-        {/* User menu */}
-        <div className="flex items-center gap-2">
-          <div className="text-right hidden md:block">
-            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-              {localStorage.getItem('username') || 'User'}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">{activeSector.name}</p>
-          </div>
-          <Button variant="ghost" size="sm" className="hover:bg-gray-100 dark:hover:bg-gray-800">
-            <User className="h-4 w-4" />
-          </Button>
-        </div>
+        <SmartDatePicker placeholder="Select date" />
       </div>
     </header>
   )

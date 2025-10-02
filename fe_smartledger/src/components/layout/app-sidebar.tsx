@@ -23,15 +23,16 @@ import {
   CreditCard,
   BarChart3,
   Settings,
-  LogOut,
   Building2,
   Store,
   Pill,
   Wrench,
+  MoreVertical,
 } from 'lucide-react'
 import { useSectorStore } from '@/store/sector-store'
 import { getFeatureDisplayName } from '@/config/feature-registry'
 import { SectorSelector } from './sector-selector'
+import { UserProfilePopover } from '@/components/shared/user-profile-popover'
 import { useTheme } from '@/hooks/use-theme'
 
 // Feature data with icons
@@ -58,11 +59,7 @@ export function AppSidebar() {
   // Get enabled features for current sector
   const sectorFeatures = enabledFeatures
 
-  const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated')
-    localStorage.removeItem('username')
-    window.location.href = '/login'
-  }
+  // Removed handleLogout - now handled in UserProfilePopover
 
 
   const getFeatureIcon = (featureId: string) => {
@@ -151,39 +148,31 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-gray-200 dark:border-gray-700 group-data-[collapsible=icon]:px-0">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip={{
-              children: "Settings",
-              className: "bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 shadow-lg"
-            }}>
-              <Button 
-                variant="ghost" 
-                className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 border border-transparent hover:border-primary/30 dark:hover:border-primary/50 transition-all duration-200 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:mx-auto"
-              >
-                <Settings className="mr-2 h-4 w-4 text-gray-600 dark:text-gray-400 group-data-[collapsible=icon]:mr-0" />
-                <span className="group-data-[collapsible=icon]:hidden">Settings</span>
-              </Button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip={{
-              children: "Logout",
-              className: "bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 shadow-lg"
-            }}>
-              <Button 
-                variant="ghost" 
-                className="w-full justify-start text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 border border-transparent hover:border-red-300 dark:hover:border-red-600 transition-all duration-200 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:mx-auto"
-                onClick={handleLogout}
-              >
-                <LogOut className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
-                <span className="group-data-[collapsible=icon]:hidden">Logout</span>
-              </Button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
+              <SidebarFooter className="border-t border-gray-200 dark:border-gray-700 group-data-[collapsible=icon]:px-0">
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <UserProfilePopover>
+                      <SidebarMenuButton asChild tooltip={{
+                        children: "Profile & Settings",
+                        className: "bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 shadow-lg"
+                      }}>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 border border-transparent hover:border-primary/30 dark:hover:border-primary/50 transition-all duration-200 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:mx-auto"
+                        >
+                          {/* Avatar - always show */}
+                          <div className="flex items-center justify-center size-6 rounded-full bg-primary text-white text-base font-semibold mr-2 group-data-[collapsible=icon]:mr-0 group-data-[collapsible=icon]:size-6 group-data-[collapsible=icon]:text-base flex-shrink-0">
+                            {(localStorage.getItem('username') || 'U').charAt(0).toUpperCase()}
+                          </div>
+                          <span className="group-data-[collapsible=icon]:hidden flex-1 truncate">{localStorage.getItem('username') || 'User'}</span>
+                          {/* Triple dot menu */}
+                          <MoreVertical className="h-4 w-4 text-gray-400 dark:text-gray-500 group-data-[collapsible=icon]:hidden flex-shrink-0" />
+                        </Button>
+                      </SidebarMenuButton>
+                    </UserProfilePopover>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarFooter>
     </Sidebar>
   )
 }
