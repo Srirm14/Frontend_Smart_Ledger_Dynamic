@@ -31,18 +31,16 @@ export default function ProductList() {
   const [loading, setLoading] = useState(true)
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([])
 
-  // Column definitions with proper sizing
+  // Column definitions with even distribution
   const columns: ColumnDef<Product>[] = [
     {
       header: 'Product Name',
       accessorKey: 'product_name',
-      size: 300,
-      minSize: 200,
       cell: ({ row }) => (
         <div className='font-medium'>
-          <div className='truncate'>{row.getValue('product_name')}</div>
+          <div className='whitespace-nowrap'>{row.getValue('product_name')}</div>
           {row.original.sku && (
-            <div className='text-xs text-gray-500 truncate'>SKU: {row.original.sku}</div>
+            <div className='text-xs text-gray-500 whitespace-nowrap'>SKU: {row.original.sku}</div>
           )}
         </div>
       )
@@ -50,10 +48,8 @@ export default function ProductList() {
     {
       header: 'Price',
       accessorKey: 'price',
-      size: 120,
-      minSize: 100,
       cell: ({ row }) => (
-        <div className='font-semibold text-green-600'>
+        <div className='font-semibold text-green-600 whitespace-nowrap'>
           ${row.getValue('price')}
         </div>
       )
@@ -61,10 +57,8 @@ export default function ProductList() {
     {
       header: 'Category',
       accessorKey: 'category',
-      size: 150,
-      minSize: 120,
       cell: ({ row }) => (
-        <div className='text-sm text-gray-600 truncate'>
+        <div className='text-sm text-gray-600 whitespace-nowrap'>
           {row.original.category || 'Uncategorized'}
         </div>
       )
@@ -72,10 +66,8 @@ export default function ProductList() {
     {
       header: 'SKU',
       accessorKey: 'sku',
-      size: 120,
-      minSize: 100,
       cell: ({ row }) => (
-        <div className='text-sm text-gray-600 font-mono'>
+        <div className='text-sm text-gray-600 font-mono whitespace-nowrap'>
           {row.original.sku || 'N/A'}
         </div>
       )
@@ -83,10 +75,8 @@ export default function ProductList() {
     {
       header: 'Description',
       accessorKey: 'description',
-      size: 200,
-      minSize: 150,
       cell: ({ row }) => (
-        <div className='text-sm text-gray-600 truncate'>
+        <div className='text-sm text-gray-600 whitespace-nowrap'>
           {row.original.description || 'No description available'}
         </div>
       )
@@ -94,10 +84,8 @@ export default function ProductList() {
     {
       header: 'Created Date',
       accessorKey: 'created_at',
-      size: 140,
-      minSize: 120,
       cell: ({ row }) => (
-        <div className='text-sm text-gray-600'>
+        <div className='text-sm text-gray-600 whitespace-nowrap'>
           {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'N/A'}
         </div>
       )
@@ -105,10 +93,8 @@ export default function ProductList() {
     {
       header: 'Updated Date',
       accessorKey: 'updated_at',
-      size: 140,
-      minSize: 120,
       cell: ({ row }) => (
-        <div className='text-sm text-gray-600'>
+        <div className='text-sm text-gray-600 whitespace-nowrap'>
           {row.original.updated_at ? new Date(row.original.updated_at).toLocaleDateString() : 'N/A'}
         </div>
       )
@@ -116,10 +102,8 @@ export default function ProductList() {
     {
       header: 'Stock Count',
       accessorKey: 'stock_count',
-      size: 120,
-      minSize: 100,
       cell: ({ row }) => (
-        <div className='text-sm font-semibold text-blue-600'>
+        <div className='text-sm font-semibold text-blue-600 whitespace-nowrap'>
           {Math.floor(Math.random() * 100) + 1}
         </div>
       )
@@ -127,10 +111,8 @@ export default function ProductList() {
     {
       header: 'Supplier',
       accessorKey: 'supplier',
-      size: 150,
-      minSize: 120,
       cell: ({ row }) => (
-        <div className='text-sm text-gray-600'>
+        <div className='text-sm text-gray-600 whitespace-nowrap'>
           Supplier {Math.floor(Math.random() * 5) + 1}
         </div>
       )
@@ -138,10 +120,8 @@ export default function ProductList() {
     {
       id: 'actions',
       header: 'Actions',
-      size: 120,
-      minSize: 100,
       cell: ({ row }) => (
-        <div className='flex items-center gap-2'>
+        <div className='flex items-center gap-2 whitespace-nowrap'>
           <Button
             size='sm'
             variant='outline'

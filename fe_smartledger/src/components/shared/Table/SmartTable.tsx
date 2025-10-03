@@ -127,18 +127,17 @@ function SmartTable<T>({
       {/* Table Container with Single Scroll Container */}
       <div className='rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full'>
         {/* Single Scroll Container - handles both horizontal and vertical scroll */}
-        <div className='max-h-[60vh] overflow-auto w-full'>
-          <table className='w-full table-fixed' style={{ minWidth: '800px', width: 'max-content' }}>
+        <div className='max-h-[60vh] overflow-auto w-full scrollbar-thin'>
+          <table className='w-full table-auto min-w-full border-collapse'>
             {/* Header */}
-            <thead className='bg-gray-50 sticky-table-header'>
+            <thead className='bg-gray-50'>
               {table.getHeaderGroups().map(headerGroup => (
                 <TableRow key={headerGroup.id} className='hover:bg-transparent'>
                   {headerGroup.headers.map(header => {
                     return (
                       <TableHead 
                         key={header.id} 
-                        style={{ width: `${header.getSize()}px`, minWidth: `${header.getSize()}px` }} 
-                        className='h-12 bg-gray-50 font-semibold text-gray-900 border-r last:border-r-0 px-4 text-left whitespace-nowrap sticky top-0 z-10'
+                        className='h-12 bg-gray-50 font-semibold text-gray-900 border-l border-r border-b first:border-l-0 last:border-r-0 px-4 text-left whitespace-nowrap sticky top-0 z-10'
                       >
                         {header.isPlaceholder ? null : header.column.getCanSort() ? (
                           <div
@@ -198,20 +197,17 @@ function SmartTable<T>({
                     key={row.id} 
                     data-state={row.getIsSelected() && 'selected'}
                     className={cn(
-                      'hover:bg-gray-50 transition-colors',
+                      'hover:bg-primary-100 transition-colors',
                       index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50',
-                      row.getIsSelected() && 'bg-blue-50 border-blue-200'
+                      row.getIsSelected() && 'bg-primary-100 border-primary-200'
                     )}
                   >
                     {row.getVisibleCells().map(cell => (
                       <TableCell 
                         key={cell.id}
-                        style={{ width: `${cell.column.getSize()}px`, minWidth: `${cell.column.getSize()}px` }}
-                        className='px-4 py-3 text-sm text-left whitespace-nowrap'
+                        className='px-4 py-3 text-sm text-left whitespace-nowrap border-l border-r border-b first:border-l-0 last:border-r-0'
                       >
-                        <div className='truncate'>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </div>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}
                   </TableRow>

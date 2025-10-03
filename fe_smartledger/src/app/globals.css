@@ -74,23 +74,26 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
     height: 4px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: #dedede83;
-    border-radius: 10px;
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #e5e7eb;
+    border-radius: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: #d1d5db;
   }
 
   .scrollbar-thin::-webkit-scrollbar-track {
-    background-color: #ffffff;
-    border-radius: 10px;
+    background-color: #f9fafb;
+    border-radius: 6px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-corner {
-    background-color: #ffffff;
+    background-color: #f9fafb;
   }
 
   .scrollbar-none {
@@ -565,14 +568,6 @@ main-scrollbar-hide .hide_on_export {
   }
   
   /* Ensure sticky positioning works properly in tables */
-  .sticky-table-header th {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 10 !important;
-    background-color: rgb(249 250 251) !important; /* bg-gray-50 */
-  }
-  
-  /* Alternative approach - target table cells directly */
   table thead th {
     position: sticky !important;
     top: 0 !important;
