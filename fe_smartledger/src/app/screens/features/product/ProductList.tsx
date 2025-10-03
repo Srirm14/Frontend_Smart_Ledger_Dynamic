@@ -70,28 +70,70 @@ export default function ProductList() {
       )
     },
     {
-      header: 'Availability',
-      accessorKey: 'availability',
+      header: 'SKU',
+      accessorKey: 'sku',
+      size: 120,
+      minSize: 100,
+      cell: ({ row }) => (
+        <div className='text-sm text-gray-600 font-mono'>
+          {row.original.sku || 'N/A'}
+        </div>
+      )
+    },
+    {
+      header: 'Description',
+      accessorKey: 'description',
+      size: 200,
+      minSize: 150,
+      cell: ({ row }) => (
+        <div className='text-sm text-gray-600 truncate'>
+          {row.original.description || 'No description available'}
+        </div>
+      )
+    },
+    {
+      header: 'Created Date',
+      accessorKey: 'created_at',
       size: 140,
       minSize: 120,
-      cell: ({ row }) => {
-        const availability = row.getValue('availability') as string
-
-        const styles = {
-          'In Stock':
-            'bg-green-100 text-green-800 border-green-200',
-          'Out of Stock':
-            'bg-red-100 text-red-800 border-red-200',
-          Limited:
-            'bg-yellow-100 text-yellow-800 border-yellow-200'
-        }[availability]
-
-        return (
-          <Badge className={cn('rounded-full border text-xs font-medium', styles)}>
-            {row.getValue('availability')}
-          </Badge>
-        )
-      }
+      cell: ({ row }) => (
+        <div className='text-sm text-gray-600'>
+          {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'N/A'}
+        </div>
+      )
+    },
+    {
+      header: 'Updated Date',
+      accessorKey: 'updated_at',
+      size: 140,
+      minSize: 120,
+      cell: ({ row }) => (
+        <div className='text-sm text-gray-600'>
+          {row.original.updated_at ? new Date(row.original.updated_at).toLocaleDateString() : 'N/A'}
+        </div>
+      )
+    },
+    {
+      header: 'Stock Count',
+      accessorKey: 'stock_count',
+      size: 120,
+      minSize: 100,
+      cell: ({ row }) => (
+        <div className='text-sm font-semibold text-blue-600'>
+          {Math.floor(Math.random() * 100) + 1}
+        </div>
+      )
+    },
+    {
+      header: 'Supplier',
+      accessorKey: 'supplier',
+      size: 150,
+      minSize: 120,
+      cell: ({ row }) => (
+        <div className='text-sm text-gray-600'>
+          Supplier {Math.floor(Math.random() * 5) + 1}
+        </div>
+      )
     },
     {
       id: 'actions',
@@ -180,7 +222,7 @@ export default function ProductList() {
 
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-6 w-full'>
       {/* Header */}
       <div className='flex items-center justify-between'>
         <div>
@@ -196,7 +238,7 @@ export default function ProductList() {
       </div>
 
       {/* Products Table */}
-      <div className='bg-white rounded-lg shadow-sm border'>
+      <div className='bg-white rounded-lg shadow-sm border w-full overflow-hidden'>
         <SmartTable
           data={products}
           columns={columns}

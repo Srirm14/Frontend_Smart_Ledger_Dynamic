@@ -124,20 +124,21 @@ function SmartTable<T>({
   return (
     <div className={cn('w-full space-y-4', className)}>
 
-      {/* Table Container with Fixed Header and Integrated Pagination */}
-      <div className='rounded-lg border bg-white shadow-sm overflow-hidden'>
-        {/* Fixed Header - Always Visible */}
-        <div className='bg-gray-50 border-b border-gray-200'>
-          <Table className='w-full table-fixed'>
-            <TableHeader>
+      {/* Table Container with Internal Scrolling */}
+      <div className='rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full'>
+        {/* Scrollable Container for Both Header and Body */}
+        <div className='max-h-[60vh] overflow-auto overflow-x-auto w-full'>
+          <Table className='w-full' style={{ minWidth: '800px', width: 'max-content' }}>
+            {/* Header */}
+            <TableHeader className='sticky top-0 z-10 bg-gray-50'>
               {table.getHeaderGroups().map(headerGroup => (
                 <TableRow key={headerGroup.id} className='hover:bg-transparent'>
                   {headerGroup.headers.map(header => {
                     return (
                       <TableHead 
                         key={header.id} 
-                        style={{ width: `${header.getSize()}px` }} 
-                        className='h-12 bg-gray-50 font-semibold text-gray-900 border-r last:border-r-0 px-4 text-left'
+                        style={{ width: `${header.getSize()}px`, minWidth: `${header.getSize()}px` }} 
+                        className='h-12 bg-gray-50 font-semibold text-gray-900 border-r last:border-r-0 px-4 text-left whitespace-nowrap'
                       >
                         {header.isPlaceholder ? null : header.column.getCanSort() ? (
                           <div
@@ -153,10 +154,10 @@ function SmartTable<T>({
                             }}
                             tabIndex={header.column.getCanSort() ? 0 : undefined}
                           >
-                            <span className='flex-1'>
+                            <span className='flex-1 truncate'>
                               {flexRender(header.column.columnDef.header, header.getContext())}
                             </span>
-                            <div className='opacity-0 group-hover:opacity-100 transition-opacity'>
+                            <div className='opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0'>
                               {{
                                 asc: <ChevronUpIcon className='shrink-0 text-gray-600' size={16} aria-hidden='true' />,
                                 desc: <ChevronDownIcon className='shrink-0 text-gray-600' size={16} aria-hidden='true' />
@@ -169,7 +170,7 @@ function SmartTable<T>({
                             </div>
                           </div>
                         ) : (
-                          <div className='px-2 py-2'>
+                          <div className='px-2 py-2 truncate'>
                             {flexRender(header.column.columnDef.header, header.getContext())}
                           </div>
                         )}
@@ -179,12 +180,8 @@ function SmartTable<T>({
                 </TableRow>
               ))}
             </TableHeader>
-          </Table>
-        </div>
-
-        {/* Scrollable Body */}
-        <div className='max-h-[60vh] overflow-auto'>
-          <Table className='w-full table-fixed'>
+            
+            {/* Body */}
             <TableBody className='bg-white'>
               {loading ? (
                 <TableRow>
@@ -201,18 +198,20 @@ function SmartTable<T>({
                     key={row.id} 
                     data-state={row.getIsSelected() && 'selected'}
                     className={cn(
-                      'hover:bg-primary-100 transition-colors',
+                      'hover:bg-gray-50 transition-colors',
                       index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50',
-                      row.getIsSelected() && 'bg-primary-100 border-primary-200'
+                      row.getIsSelected() && 'bg-blue-50 border-blue-200'
                     )}
                   >
                     {row.getVisibleCells().map(cell => (
                       <TableCell 
                         key={cell.id}
-                        style={{ width: `${cell.column.getSize()}px` }}
-                        className='px-4 py-3 text-sm text-left'
+                        style={{ width: `${cell.column.getSize()}px`, minWidth: `${cell.column.getSize()}px` }}
+                        className='px-4 py-3 text-sm text-left whitespace-nowrap'
                       >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        <div className='truncate'>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </div>
                       </TableCell>
                     ))}
                   </TableRow>
