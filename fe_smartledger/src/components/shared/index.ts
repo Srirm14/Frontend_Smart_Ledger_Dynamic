@@ -2,8 +2,8 @@
 export { default as SmartTab } from './SmartTab'
 export type { TabItem } from './SmartTab'
 
-export { default as SmartTable } from './Table/SmartTable'
-export type { Column } from './Table/SmartTable'
+export { SmartTable } from './Table/SmartTable'
+export type { SmartTableProps } from './Table/SmartTable'
 
 export { default as SmartTableActionPopover } from './Table/SmartTableActionPopover'
 export type { ActionItem, SmartTableActionPopoverProps } from './Table/SmartTableActionPopover'

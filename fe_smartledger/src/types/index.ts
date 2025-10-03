@@ -215,3 +215,4 @@ export interface ChatMessage {
 export * from './api'
 export * from './features'
 export * from './sectors'
+export * from './table'
