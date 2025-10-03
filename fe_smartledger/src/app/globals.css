@@ -563,4 +563,20 @@ main-scrollbar-hide .hide_on_export {
   .w-full {
     max-width: 100%;
   }
+  
+  /* Ensure sticky positioning works properly in tables */
+  .sticky-table-header th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+    background-color: rgb(249 250 251) !important; /* bg-gray-50 */
+  }
+  
+  /* Alternative approach - target table cells directly */
+  table thead th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+    background-color: rgb(249 250 251) !important;
+  }
 }

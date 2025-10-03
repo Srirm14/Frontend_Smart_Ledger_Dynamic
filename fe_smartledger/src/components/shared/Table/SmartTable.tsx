@@ -124,13 +124,13 @@ function SmartTable<T>({
   return (
     <div className={cn('w-full space-y-4', className)}>
 
-      {/* Table Container with Internal Scrolling */}
+      {/* Table Container with Single Scroll Container */}
       <div className='rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full'>
-        {/* Scrollable Container for Both Header and Body */}
-        <div className='max-h-[60vh] overflow-auto overflow-x-auto w-full'>
-          <Table className='w-full' style={{ minWidth: '800px', width: 'max-content' }}>
+        {/* Single Scroll Container - handles both horizontal and vertical scroll */}
+        <div className='max-h-[60vh] overflow-auto w-full'>
+          <table className='w-full table-fixed' style={{ minWidth: '800px', width: 'max-content' }}>
             {/* Header */}
-            <TableHeader className='sticky top-0 z-10 bg-gray-50'>
+            <thead className='bg-gray-50 sticky-table-header'>
               {table.getHeaderGroups().map(headerGroup => (
                 <TableRow key={headerGroup.id} className='hover:bg-transparent'>
                   {headerGroup.headers.map(header => {
@@ -138,7 +138,7 @@ function SmartTable<T>({
                       <TableHead 
                         key={header.id} 
                         style={{ width: `${header.getSize()}px`, minWidth: `${header.getSize()}px` }} 
-                        className='h-12 bg-gray-50 font-semibold text-gray-900 border-r last:border-r-0 px-4 text-left whitespace-nowrap'
+                        className='h-12 bg-gray-50 font-semibold text-gray-900 border-r last:border-r-0 px-4 text-left whitespace-nowrap sticky top-0 z-10'
                       >
                         {header.isPlaceholder ? null : header.column.getCanSort() ? (
                           <div
@@ -179,10 +179,10 @@ function SmartTable<T>({
                   })}
                 </TableRow>
               ))}
-            </TableHeader>
+            </thead>
             
             {/* Body */}
-            <TableBody className='bg-white'>
+            <tbody className='bg-white'>
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={enhancedColumns.length} className='h-32 text-center'>
@@ -226,8 +226,8 @@ function SmartTable<T>({
                   </TableCell>
                 </TableRow>
               )}
-            </TableBody>
-          </Table>
+            </tbody>
+          </table>
         </div>
 
         {/* Integrated Pagination Footer */}
