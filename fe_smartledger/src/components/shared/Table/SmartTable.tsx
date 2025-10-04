@@ -44,6 +44,7 @@ function SmartTable<T>({
   loading = false,
   emptyMessage = 'No results found.',
   className,
+  rowContainerHeight,
   paginationConfig = {
     pageSize: 10,
     pageSizeOptions: [5, 10, 25, 50],
@@ -131,13 +132,43 @@ function SmartTable<T>({
     paginationItemsToDisplay: paginationConfig.paginationItemsToDisplay || 5
   })
 
+  // Auto-detect if we should use flex-based sizing - optimized with useCallback
+  const shouldUseFlexSizing = useCallback(() => {
+    // If rowContainerHeight is explicitly provided, use it
+    if (rowContainerHeight) {
+      return rowContainerHeight === 'h-full'
+    }
+    
+    // Auto-detect: if className contains flex or height classes, use flex sizing
+    if (className && (className.includes('flex') || className.includes('h-full') || className.includes('h-['))) {
+      return true
+    }
+    
+    // Default: use responsive max-height
+    return false
+  }, [rowContainerHeight, className])
+
+  // Determine height class based on auto-detection or explicit prop - optimized with useCallback
+  const getHeightClass = useCallback(() => {
+    if (rowContainerHeight === 'h-full' || shouldUseFlexSizing()) {
+      return 'h-full'
+    }
+    if (rowContainerHeight) {
+      return rowContainerHeight
+    }
+    return 'max-h-[60vh]'
+  }, [rowContainerHeight, shouldUseFlexSizing])
+
+  const useFlexSizing = useMemo(() => shouldUseFlexSizing(), [shouldUseFlexSizing])
+  const heightClass = useMemo(() => getHeightClass(), [getHeightClass])
+
   return (
-    <div className={cn('w-full space-y-4', className)}>
+    <div className={cn('w-full space-y-4', useFlexSizing ? 'flex flex-col h-full' : '', className)}>
 
       {/* Table Container with Single Scroll Container */}
-      <div className='rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full'>
+      <div className={cn('rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full', useFlexSizing ? 'flex-1 flex flex-col' : '')}>
         {/* Single Scroll Container - handles both horizontal and vertical scroll */}
-        <div className='max-h-[60vh] overflow-auto w-full scrollbar-thin'>
+        <div className={cn('overflow-auto w-full scrollbar-thin', heightClass, useFlexSizing ? 'flex-1' : '')}>
           <table className='w-full table-auto min-w-full border-collapse'>
             {/* Header */}
             <thead className='bg-gray-50'>
@@ -258,7 +289,7 @@ function SmartTable<T>({
 
         {/* Integrated Pagination Footer */}
         {enablePagination && (
-          <div className='bg-gray-50 border-t border-gray-200 px-4 py-3'>
+          <div className={cn('bg-gray-50 border-t border-gray-200 px-4 py-3', useFlexSizing ? 'flex-shrink-0' : '')}>
             <div className='flex items-center justify-between gap-3 max-sm:flex-col'>
               {paginationConfig.showPageInfo && (
                 <div className='flex-1 text-sm whitespace-nowrap flex items-center gap-4'>

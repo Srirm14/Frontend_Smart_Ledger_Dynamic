@@ -10,10 +10,7 @@ export type { ActionItem, SmartTableActionPopoverProps } from './Table/SmartTabl
 
 export { SmartTableToolbar } from './SmartTableToolbar'
 export { SmartContentHeader } from './SmartContentHeader'
-
-
-export { default as SmartFooter } from './layout/SmartFooter'
-export type { SmartFooterProps } from './layout/SmartFooter'
+export { SmartFooter } from './layout/SmartFooter'
 
 // Form Components
 export * from './Inputs'

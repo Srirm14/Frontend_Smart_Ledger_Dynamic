@@ -13,6 +13,7 @@ export interface TableConfig<T> {
   loading?: boolean
   emptyMessage?: string
   className?: string
+  rowContainerHeight?: string
 }
 
 export interface PaginationConfig {

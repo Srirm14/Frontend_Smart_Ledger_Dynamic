@@ -6,7 +6,7 @@ import { EditIcon, TrashIcon, PlusIcon, MoreHorizontalIcon, CheckCircleIcon, XCi
 import type { ColumnDef } from '@tanstack/react-table'
 
 import { Button } from '@/components/ui/button'
-import { SmartTable, SmartTableToolbar, SmartContentHeader } from '@/components/shared'
+import { SmartTable, SmartTableToolbar, SmartContentHeader, SmartFooter } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
 import { 
   DropdownMenu, 
@@ -303,6 +303,7 @@ export default function ProductList() {
               enableSorting={true}
               enableSelection={true}
               enablePagination={true}
+              rowContainerHeight='max-h-[calc(100vh-390px)]'
               onRowSelect={handleRowSelect}
               loading={loading}
               emptyMessage='No products found. Add some products to get started.'
@@ -316,88 +317,10 @@ export default function ProductList() {
               className='h-full'
             />
           </SmartTableToolbar>
-
-            {/* Smart Table Toolbar with Actions */}
-            <SmartTableToolbar
-            title="Actions"
-            actions={
-              <>
-                <Button 
-                  variant='outline' 
-                  className='border-blue-200 text-blue-700 hover:bg-blue-50'
-                >
-                  <PackageIcon className='h-4 w-4 mr-2' />
-                  Import Products
-                </Button>
-                <Button className='bg-blue-600 hover:bg-blue-700 text-white shadow-lg'>
-                  <PlusIcon className='h-4 w-4 mr-2' />
-                  Add Product
-                </Button>
-              </>
-            }
-          >
-            <SmartTable
-              data={products}
-              columns={columns}
-              pageSize={15}
-              enableSorting={true}
-              enableSelection={true}
-              enablePagination={true}
-              onRowSelect={handleRowSelect}
-              loading={loading}
-              emptyMessage='No products found. Add some products to get started.'
-              paginationConfig={{
-                pageSize: 15,
-                pageSizeOptions: [10, 15, 25, 50, 100],
-                showPageSizeSelector: true,
-                showPageInfo: true,
-                paginationItemsToDisplay: 7
-              }}
-              className='h-full'
-            />
-          </SmartTableToolbar>
-
-            {/* Smart Table Toolbar with Actions */}
-            <SmartTableToolbar
-            title="Actions"
-            actions={
-              <>
-                <Button 
-                  variant='outline' 
-                  className='border-blue-200 text-blue-700 hover:bg-blue-50'
-                >
-                  <PackageIcon className='h-4 w-4 mr-2' />
-                  Import Products
-                </Button>
-                <Button className='bg-blue-600 hover:bg-blue-700 text-white shadow-lg'>
-                  <PlusIcon className='h-4 w-4 mr-2' />
-                  Add Product
-                </Button>
-              </>
-            }
-          >
-            <SmartTable
-              data={products}
-              columns={columns}
-              pageSize={15}
-              enableSorting={true}
-              enableSelection={true}
-              enablePagination={true}
-              onRowSelect={handleRowSelect}
-              loading={loading}
-              emptyMessage='No products found. Add some products to get started.'
-              paginationConfig={{
-                pageSize: 15,
-                pageSizeOptions: [10, 15, 25, 50, 100],
-                showPageSizeSelector: true,
-                showPageInfo: true,
-                paginationItemsToDisplay: 7
-              }}
-              className='h-full'
-            />
-          </SmartTableToolbar>
+        
         </div>
       </div>
+      <SmartFooter />
     </div>
   )
 }
