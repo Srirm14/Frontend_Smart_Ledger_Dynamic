@@ -46,14 +46,9 @@ export const FeatureListFactory = memo(function FeatureListFactory({
 
   if (loading) {
     return (
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-center justify-center">
-            <SmartLoadingSpinner size="sm" className="py-0" />
-            <span className="ml-2 text-gray-500">Loading {featureKey} list...</span>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="w-full h-screen flex items-center justify-center bg-white">
+        <SmartLoadingSpinner size="md" />
+      </div>
     )
   }
 

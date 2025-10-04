@@ -19,7 +19,6 @@ export default function FeaturePage() {
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <SmartLoadingSpinner size="md" className="mb-4" />
-        <p className="text-gray-600">Redirecting to {featureId} list...</p>
       </div>
     </div>
   )
