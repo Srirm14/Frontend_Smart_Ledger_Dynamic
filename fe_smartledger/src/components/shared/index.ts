@@ -1,20 +1,48 @@
+// =======================
 // Smart Components
+// =======================
+
+// SmartTab
 export { default as SmartTab } from './SmartTab'
 export type { TabItem } from './SmartTab'
 
+// SmartTable
 export { SmartTable } from './Table/SmartTable'
 export type { SmartTableProps } from '@/types/table'
 
+// SmartTableActionPopover
 export { default as SmartTableActionPopover } from './Table/SmartTableActionPopover'
 export type { ActionItem, SmartTableActionPopoverProps } from './Table/SmartTableActionPopover'
 
+// SmartTableToolbar
 export { SmartTableToolbar } from './SmartTableToolbar'
-export { SmartContentHeader } from './SmartContentHeader'
-export { SmartFooter } from './layout/SmartFooter'
 
+// SmartContentHeader
+export { SmartContentHeader } from './SmartContentHeader'
+
+// LoadingSpinner
+export { LoadingSpinner } from './LoadingSpinner'
+
+// =======================
 // Form Components
+// =======================
 export * from './Inputs'
 
-// Other Components
+// =======================
+// Date Picker
+// =======================
 export { SmartDatePicker } from './DatePicker/smartDatePicker'
-export { UserProfilePopover } from './layout/user-profile-popover'
+
+// =======================
+// Layout Components
+// =======================
+
+// Sidebar
+export { SmartAppSidebar } from './layout/Sidebar/SmartAppSidebar'
+export { UserProfilePopover } from './layout/Sidebar/UserProfilePopover'
+
+// Header
+export { SmartAppHeader } from './layout/Header/SmartAppHeader'
+
+// Footer
+export { SmartAppFooter } from './layout/Footer/SmartAppFooter'

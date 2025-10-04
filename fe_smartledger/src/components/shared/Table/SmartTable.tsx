@@ -24,7 +24,9 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from '@/components/ui/pagination'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {  TableCell, TableHead,  TableRow } from '@/components/ui/table'
+
+import { LoadingSpinner } from '@/components/shared'
 
 import { usePagination } from '@/hooks/use-pagination'
 import type { SmartTableProps } from '@/types/table'
@@ -165,127 +167,127 @@ function SmartTable<T>({
   return (
     <div className={cn('w-full space-y-4', useFlexSizing ? 'flex flex-col h-full' : '', className)}>
 
-      {/* Table Container with Single Scroll Container */}
-      <div className={cn('rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full', useFlexSizing ? 'flex-1 flex flex-col' : '')}>
-        {/* Single Scroll Container - handles both horizontal and vertical scroll */}
-        <div className={cn('overflow-auto w-full scrollbar-thin', heightClass, useFlexSizing ? 'flex-1' : '')}>
-          <table className='w-full table-auto min-w-full border-collapse'>
-            {/* Header */}
-            <thead className='bg-gray-50'>
-              {table.getHeaderGroups().map(headerGroup => (
-                <TableRow key={headerGroup.id} className='hover:bg-transparent'>
-                  {headerGroup.headers.map(header => {
-                    return (
-                      <TableHead 
-                        key={header.id} 
-                        className={cn(
-                          'h-12 font-semibold text-gray-900 border-l border-r border-b first:border-l-0 last:border-r-0 px-4 text-left whitespace-nowrap sticky top-0 z-10 bg-gray-50 rounded-lg  ',
-                          header.column.columnDef.meta?.sticky === 'left' && 'sticky left-0 z-[99999]'
-                        )}
-                        style={header.column.columnDef.meta?.sticky === 'left' ? {
-                          position: 'sticky',
-                          top: 0,
-                          left: 0,
-                          zIndex: 99999
-                        } : undefined}
-                        data-sticky={header.column.columnDef.meta?.sticky}
-                      >
-                        {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                          <div
-                            className={cn(
-                              'group flex h-full cursor-pointer items-center justify-between gap-2 select-none hover:bg-gray-100 px-2 py-2 rounded transition-colors'
-                            )}
-                            onClick={header.column.getToggleSortingHandler()}
-                            onKeyDown={e => {
-                              if (header.column.getCanSort() && (e.key === 'Enter' || e.key === ' ')) {
-                                e.preventDefault()
-                                header.column.getToggleSortingHandler()?.(e)
-                              }
-                            }}
-                            tabIndex={header.column.getCanSort() ? 0 : undefined}
-                          >
-                            <span className='flex-1 truncate'>
-                              {flexRender(header.column.columnDef.header, header.getContext())}
-                            </span>
-                            <div className='opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0'>
-                              {{
-                                asc: <ChevronUpIcon className='shrink-0 text-gray-600' size={16} aria-hidden='true' />,
-                                desc: <ChevronDownIcon className='shrink-0 text-gray-600' size={16} aria-hidden='true' />
-                              }[header.column.getIsSorted() as string] ?? (
-                                <div className='flex flex-col'>
-                                  <ChevronUpIcon className='shrink-0 text-gray-400 -mb-1' size={12} aria-hidden='true' />
-                                  <ChevronDownIcon className='shrink-0 text-gray-400' size={12} aria-hidden='true' />
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        ) : (
-                          <div className='px-2 py-2 truncate'>
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                          </div>
-                        )}
-                      </TableHead>
-                    )
-                  })}
-                </TableRow>
-              ))}
-            </thead>
-            
-            {/* Body */}
-            <tbody className='bg-white'>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={enhancedColumns.length} className='h-32 text-center'>
-                    <div className='flex items-center justify-center'>
-                      <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
-                      <span className='ml-3 text-gray-600'>Loading...</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ) : table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row, index) => (
-                  <TableRow 
-                    key={row.id} 
-                    data-state={row.getIsSelected() && 'selected'}
-                    className={cn(
-                      'hover:bg-primary-100 transition-colors',
-                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50',
-                      row.getIsSelected() && 'bg-primary-100 border-primary-200'
-                    )}
-                  >
-                    {row.getVisibleCells().map(cell => (
-                      <TableCell 
-                        key={cell.id}
-                        className={cn(
-                          'px-4 py-3 text-sm text-left whitespace-nowrap border-l border-r border-b first:border-l-0 last:border-r-0',
-                          cell.column.columnDef.meta?.sticky === 'left' && 'sticky left-0 z-[99998] bg-white'
-                        )}
-                        style={cell.column.columnDef.meta?.sticky === 'left' ? {
-                          position: 'sticky',
-                          left: 0,
-                          zIndex: 99998,
-                          backgroundColor: 'white'
-                        } : undefined}
-                        data-sticky={cell.column.columnDef.meta?.sticky}
-                      >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={enhancedColumns.length} className='h-32 text-center text-gray-500'>
-                    <div className='flex flex-col items-center justify-center'>
-                      <div className='text-lg font-medium mb-2'>{emptyMessage}</div>
-                      <div className='text-sm text-gray-400'>No data available to display</div>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )}
-            </tbody>
-          </table>
+      {/* Loading State - Show loader instead of entire table */}
+      {loading ? (
+        <div className={cn('rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full h-screen', useFlexSizing ? 'flex-1 flex flex-col' : '', heightClass)}>
+          <div className="flex items-center justify-center h-full">
+            <LoadingSpinner size="md" className="py-0" />
+          </div>
         </div>
+      ) : (
+        <>
+          {/* Table Container with Single Scroll Container */}
+          <div className={cn('rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full', useFlexSizing ? 'flex-1 flex flex-col' : '')}>
+            {/* Single Scroll Container - handles both horizontal and vertical scroll */}
+            <div className={cn('overflow-auto w-full scrollbar-thin', heightClass, useFlexSizing ? 'flex-1' : '')}>
+              <table className='w-full table-auto min-w-full border-collapse'>
+                {/* Header */}
+                <thead className='bg-gray-50'>
+                  {table.getHeaderGroups().map(headerGroup => (
+                    <TableRow key={headerGroup.id} className='hover:bg-transparent'>
+                      {headerGroup.headers.map(header => {
+                        return (
+                          <TableHead 
+                            key={header.id} 
+                            className={cn(
+                              'h-12 font-semibold text-gray-900 border-l border-r border-b first:border-l-0 last:border-r-0 px-4 text-left whitespace-nowrap sticky top-0 z-10 bg-gray-50 rounded-lg  ',
+                              header.column.columnDef.meta?.sticky === 'left' && 'sticky left-0 z-[99999]'
+                            )}
+                            style={header.column.columnDef.meta?.sticky === 'left' ? {
+                              position: 'sticky',
+                              top: 0,
+                              left: 0,
+                              zIndex: 99999
+                            } : undefined}
+                            data-sticky={header.column.columnDef.meta?.sticky}
+                          >
+                            {header.isPlaceholder ? null : header.column.getCanSort() ? (
+                              <div
+                                className={cn(
+                                  'group flex h-full cursor-pointer items-center justify-between gap-2 select-none hover:bg-gray-100 px-2 py-2 rounded transition-colors'
+                                )}
+                                onClick={header.column.getToggleSortingHandler()}
+                                onKeyDown={e => {
+                                  if (header.column.getCanSort() && (e.key === 'Enter' || e.key === ' ')) {
+                                    e.preventDefault()
+                                    header.column.getToggleSortingHandler()?.(e)
+                                  }
+                                }}
+                                tabIndex={header.column.getCanSort() ? 0 : undefined}
+                              >
+                                <span className='flex-1 truncate'>
+                                  {flexRender(header.column.columnDef.header, header.getContext())}
+                                </span>
+                                <div className='opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0'>
+                                  {{
+                                    asc: <ChevronUpIcon className='shrink-0 text-gray-600' size={16} aria-hidden='true' />,
+                                    desc: <ChevronDownIcon className='shrink-0 text-gray-600' size={16} aria-hidden='true' />
+                                  }[header.column.getIsSorted() as string] ?? (
+                                    <div className='flex flex-col'>
+                                      <ChevronUpIcon className='shrink-0 text-gray-400 -mb-1' size={12} aria-hidden='true' />
+                                      <ChevronDownIcon className='shrink-0 text-gray-400' size={12} aria-hidden='true' />
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className='px-2 py-2 truncate'>
+                                {flexRender(header.column.columnDef.header, header.getContext())}
+                              </div>
+                            )}
+                          </TableHead>
+                        )
+                      })}
+                    </TableRow>
+                  ))}
+                </thead>
+                
+                {/* Body */}
+                <tbody className='bg-white'>
+                  {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row, index) => (
+                      <TableRow 
+                        key={row.id} 
+                        data-state={row.getIsSelected() && 'selected'}
+                        className={cn(
+                          'hover:bg-primary-100 transition-colors',
+                          index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50',
+                          row.getIsSelected() && 'bg-primary-100 border-primary-200'
+                        )}
+                      >
+                        {row.getVisibleCells().map(cell => (
+                          <TableCell 
+                            key={cell.id}
+                            className={cn(
+                              'px-4 py-3 text-sm text-left whitespace-nowrap border-l border-r border-b first:border-l-0 last:border-r-0',
+                              cell.column.columnDef.meta?.sticky === 'left' && 'sticky left-0 z-[99998] bg-white'
+                            )}
+                            style={cell.column.columnDef.meta?.sticky === 'left' ? {
+                              position: 'sticky',
+                              left: 0,
+                              zIndex: 99998,
+                              backgroundColor: 'white'
+                            } : undefined}
+                            data-sticky={cell.column.columnDef.meta?.sticky}
+                          >
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={enhancedColumns.length} className='h-32 text-center text-gray-500'>
+                        <div className='flex flex-col items-center justify-center'>
+                          <div className='text-lg font-medium mb-2'>{emptyMessage}</div>
+                          <div className='text-sm text-gray-400'>No data available to display</div>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </tbody>
+              </table>
+            </div>
 
         {/* Integrated Pagination Footer */}
         {enablePagination && (
@@ -395,8 +397,10 @@ function SmartTable<T>({
               )}
             </div>
           </div>
-        )}
-      </div>
+          )}
+        </div>
+        </>
+      )}
     </div>
   )
 }

@@ -18,11 +18,11 @@ import {
 } from '@/components/ui/sidebar'
 // Removed unused imports
 import { useSectorStore } from '@/store/sector-store'
-import { SectorSelector } from './sector-selector'
+import { SectorSelector } from '../Sidebar/SectorSelector'
 import { SmartDatePicker } from '@/components/shared/DatePicker/smartDatePicker'
 import { useTheme } from '@/hooks/use-theme'
 
-export function SiteHeader() {
+export function SmartAppHeader() {
   const pathname = usePathname()
   const { activeSector } = useSectorStore()
   const { toggleSidebar } = useSidebar()

@@ -6,7 +6,7 @@ import { EditIcon, TrashIcon, PlusIcon, MoreHorizontalIcon, CheckCircleIcon, XCi
 import type { ColumnDef } from '@tanstack/react-table'
 
 import { Button } from '@/components/ui/button'
-import { SmartTable, SmartTableToolbar, SmartContentHeader, SmartFooter } from '@/components/shared'
+import { SmartTable, SmartTableToolbar, SmartContentHeader, SmartAppFooter } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
 import { 
   DropdownMenu, 
@@ -320,7 +320,7 @@ export default function ProductList() {
         
         </div>
       </div>
-      <SmartFooter />
+      <SmartAppFooter />
     </div>
   )
 }

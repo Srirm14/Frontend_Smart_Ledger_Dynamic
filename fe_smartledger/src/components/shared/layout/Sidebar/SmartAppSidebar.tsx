@@ -35,8 +35,8 @@ import {
 } from 'lucide-react'
 import { useSectorStore } from '@/store/sector-store'
 import { getFeatureDisplayName } from '@/config/feature-registry'
-import { SectorSelector } from './sector-selector'
-import { UserProfilePopover } from '@/components/shared/layout/user-profile-popover'
+import { SectorSelector } from './SectorSelector'
+import { UserProfilePopover } from '@/components/shared/layout/Sidebar/UserProfilePopover'
 import { useTheme } from '@/hooks/use-theme'
 
 // Feature data with icons
@@ -53,7 +53,7 @@ const featureIcons = {
 } as const
 
 
-export function AppSidebar() {
+export function SmartAppSidebar() {
   const pathname = usePathname()
   const { activeSector, getEnabledFeatures } = useSectorStore()
   const { isDark } = useTheme()
