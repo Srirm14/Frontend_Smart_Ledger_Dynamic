@@ -55,10 +55,10 @@ export default function SectorLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset className="w-full max-w-full overflow-hidden">
+      <SidebarInset className="flex flex-col h-screen min-w-0 overflow-hidden">
         <SiteHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0 overflow-hidden">
-          <div className="flex-1 w-full max-w-full overflow-hidden">
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+          <div className="flex-1 min-w-0 overflow-hidden">
             {children}
           </div>
         </div>

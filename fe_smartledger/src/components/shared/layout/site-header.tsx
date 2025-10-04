@@ -67,7 +67,7 @@ export function SiteHeader() {
   const breadcrumbSegments = getBreadcrumbSegments(pathname)
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+    <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-[99999999]">
       <div className="flex items-center gap-2 px-4">
         <SidebarTrigger className="-ml-1" />
         <Separator

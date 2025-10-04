@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { Card, CardHeader } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 
 interface SmartContentHeaderProps {
   icon: ReactNode
@@ -10,7 +10,7 @@ interface SmartContentHeaderProps {
   stats?: Array<{
     label: string
     value: number | string
-    color?: 'default' | 'green' | 'gray' | 'red' | 'blue'
+    color?: 'default' | 'primary' | 'black'
   }>
   className?: string
 }
@@ -24,47 +24,49 @@ export function SmartContentHeader({
 }: SmartContentHeaderProps) {
   const getStatColor = (color?: string) => {
     switch (color) {
-      case 'green':
-        return 'text-green-600'
-      case 'gray':
-        return 'text-gray-500'
-      case 'red':
-        return 'text-red-600'
-      case 'blue':
-        return 'text-blue-600'
+      case 'primary':
+        return 'text-primary-600'
       default:
-        return 'text-gray-700'
+        return 'text-black'
     }
   }
 
   return (
-    <Card className={`border-0 shadow-sm bg-gradient-to-r from-blue-50 to-indigo-50 ${className}`}>
-      <CardHeader className='pb-4'>
-        <div className='flex items-center space-x-4'>
-          <div className='p-3 bg-blue-100 rounded-xl'>
-            {icon}
+    <div className={cn(
+      'sticky top-0 z-[999999] flex-1 border-0 shadow-sm bg-gradient-to-r from-primary-100 to-indigo-50 rounded-lg border border-primary-200',
+      className
+    )}>
+      <div className='py-3 px-4'>
+        <div className='flex items-center justify-between'>
+          {/* Left side - Icon and Text */}
+          <div className='flex items-center space-x-4'>
+            <div className='p-2 bg-primary-100 rounded-lg'>
+              {icon}
+            </div>
+            <div>
+              <h1 className='text-xl font-semibold tracking-tight text-gray-900'>
+                {title}
+              </h1>
+              <p className='text-gray-600 text-sm'>
+                {subtitle}
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className='text-3xl font-bold tracking-tight text-gray-900'>
-              {title}
-            </h1>
-            <p className='text-gray-600 mt-1'>
-              {subtitle}
-            </p>
-            {stats.length > 0 && (
-              <div className='flex items-center space-x-4 mt-2'>
-                {stats.map((stat, index) => (
-                  <div key={index} className='text-sm text-gray-500'>
-                    <span className={`font-semibold ${getStatColor(stat.color)}`}>
-                      {stat.value}
-                    </span> {stat.label}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          
+          {/* Right side - Stats */}
+          {stats.length > 0 && (
+            <div className='flex items-center space-x-6'>
+              {stats.map((stat, index) => (
+                <div key={index} className='text-sm text-gray-500'>
+                  <span className={`font-semibold ${getStatColor(stat.color)}`}>
+                    {stat.value}
+                  </span> <span className='text-sm font-medium'>{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </CardHeader>
-    </Card>
+      </div>
+    </div>
   )
 }

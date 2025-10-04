@@ -258,58 +258,146 @@ export default function ProductList() {
 
 
   return (
-    <div className='space-y-6 w-full'>
-      {/* Smart Content Header */}
-      <SmartContentHeader
-        icon={<PackageIcon className='h-8 w-8 text-blue-600' />}
-        title="Product Management"
-        subtitle="Manage your product inventory, pricing, and availability"
-        stats={[
-          { label: 'Total Products', value: products.length, color: 'default' },
-          { label: 'Active', value: products.filter(p => p.is_active !== false).length, color: 'green' },
-          { label: 'Inactive', value: products.filter(p => p.is_active === false).length, color: 'gray' }
-        ]}
-      />
-
-      {/* Smart Table Toolbar with Actions */}
-      <SmartTableToolbar
-        title="Actions"
-        actions={
-          <>
-            <Button 
-              variant='outline' 
-              className='border-blue-200 text-blue-700 hover:bg-blue-50'
-            >
-              <PackageIcon className='h-4 w-4 mr-2' />
-              Import Products
-            </Button>
-            <Button className='bg-blue-600 hover:bg-blue-700 text-white shadow-lg'>
-              <PlusIcon className='h-4 w-4 mr-2' />
-              Add Product
-            </Button>
-          </>
-        }
-      >
-        <SmartTable
-          data={products}
-          columns={columns}
-          pageSize={15}
-          enableSorting={true}
-          enableSelection={true}
-          enablePagination={true}
-          onRowSelect={handleRowSelect}
-          loading={loading}
-          emptyMessage='No products found. Add some products to get started.'
-          paginationConfig={{
-            pageSize: 15,
-            pageSizeOptions: [10, 15, 25, 50, 100],
-            showPageSizeSelector: true,
-            showPageInfo: true,
-            paginationItemsToDisplay: 7
-          }}
-          className='h-full'
+    <div className='w-full max-w-full min-w-0 h-full flex flex-col'>
+      {/* Smart Content Header - Fixed at top */}
+      <div className='flex-shrink-0 px-4 pt-4 pb-0'>
+        <SmartContentHeader
+          icon={<PackageIcon className='h-8 w-8 text-primary-500' />}
+          title="Product Management"
+          className='mb-2'
+          subtitle="Manage your product inventory, pricing, and availability"
+          stats={[
+            { label: 'Total Products', value: products.length, color: 'default' },
+            { label: 'Active', value: products.filter(p => p.is_active !== false).length, color: 'primary' },
+            { label: 'Inactive', value: products.filter(p => p.is_active === false).length, color: 'default' }
+          ]}
         />
-      </SmartTableToolbar>
+      </div>
+
+      {/* Scrollable Content Area */}
+      <div className='flex-1 overflow-auto min-h-0 p-4 pt-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400'>
+        <div className='space-y-6'>
+          {/* Smart Table Toolbar with Actions */}
+          <SmartTableToolbar
+            title="Actions"
+            actions={
+              <>
+                <Button 
+                  variant='outline' 
+                  className='border-blue-200 text-blue-700 hover:bg-blue-50'
+                >
+                  <PackageIcon className='h-4 w-4 mr-2' />
+                  Import Products
+                </Button>
+                <Button className='bg-blue-600 hover:bg-blue-700 text-white shadow-lg'>
+                  <PlusIcon className='h-4 w-4 mr-2' />
+                  Add Product
+                </Button>
+              </>
+            }
+          >
+            <SmartTable
+              data={products}
+              columns={columns}
+              pageSize={15}
+              enableSorting={true}
+              enableSelection={true}
+              enablePagination={true}
+              onRowSelect={handleRowSelect}
+              loading={loading}
+              emptyMessage='No products found. Add some products to get started.'
+              paginationConfig={{
+                pageSize: 15,
+                pageSizeOptions: [10, 15, 25, 50, 100],
+                showPageSizeSelector: true,
+                showPageInfo: true,
+                paginationItemsToDisplay: 7
+              }}
+              className='h-full'
+            />
+          </SmartTableToolbar>
+
+            {/* Smart Table Toolbar with Actions */}
+            <SmartTableToolbar
+            title="Actions"
+            actions={
+              <>
+                <Button 
+                  variant='outline' 
+                  className='border-blue-200 text-blue-700 hover:bg-blue-50'
+                >
+                  <PackageIcon className='h-4 w-4 mr-2' />
+                  Import Products
+                </Button>
+                <Button className='bg-blue-600 hover:bg-blue-700 text-white shadow-lg'>
+                  <PlusIcon className='h-4 w-4 mr-2' />
+                  Add Product
+                </Button>
+              </>
+            }
+          >
+            <SmartTable
+              data={products}
+              columns={columns}
+              pageSize={15}
+              enableSorting={true}
+              enableSelection={true}
+              enablePagination={true}
+              onRowSelect={handleRowSelect}
+              loading={loading}
+              emptyMessage='No products found. Add some products to get started.'
+              paginationConfig={{
+                pageSize: 15,
+                pageSizeOptions: [10, 15, 25, 50, 100],
+                showPageSizeSelector: true,
+                showPageInfo: true,
+                paginationItemsToDisplay: 7
+              }}
+              className='h-full'
+            />
+          </SmartTableToolbar>
+
+            {/* Smart Table Toolbar with Actions */}
+            <SmartTableToolbar
+            title="Actions"
+            actions={
+              <>
+                <Button 
+                  variant='outline' 
+                  className='border-blue-200 text-blue-700 hover:bg-blue-50'
+                >
+                  <PackageIcon className='h-4 w-4 mr-2' />
+                  Import Products
+                </Button>
+                <Button className='bg-blue-600 hover:bg-blue-700 text-white shadow-lg'>
+                  <PlusIcon className='h-4 w-4 mr-2' />
+                  Add Product
+                </Button>
+              </>
+            }
+          >
+            <SmartTable
+              data={products}
+              columns={columns}
+              pageSize={15}
+              enableSorting={true}
+              enableSelection={true}
+              enablePagination={true}
+              onRowSelect={handleRowSelect}
+              loading={loading}
+              emptyMessage='No products found. Add some products to get started.'
+              paginationConfig={{
+                pageSize: 15,
+                pageSizeOptions: [10, 15, 25, 50, 100],
+                showPageSizeSelector: true,
+                showPageInfo: true,
+                paginationItemsToDisplay: 7
+              }}
+              className='h-full'
+            />
+          </SmartTableToolbar>
+        </div>
+      </div>
     </div>
   )
 }
