@@ -209,12 +209,7 @@ const ProductDetails = memo(function ProductDetails({ productId, onBack }: Produ
       </div>
       
       {/* Footer - Fixed at bottom */}
-      <SmartAppFooter 
-        variant="actions"
-        onSave={handleSave}
-        saveLabel="SAVE"
-        saveDisabled={!hasChanges}
-      />
+      <SmartAppFooter />
     </div>
   )
 })

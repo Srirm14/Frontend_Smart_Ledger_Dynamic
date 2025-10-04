@@ -92,7 +92,7 @@ export default function ProductList({ sector = 'petrolBunk', featureKey = 'produ
 
 
   return (
-    <div className='w-full max-w-full min-w-0 min-h-screen flex flex-col'>
+    <div className='w-full max-w-full min-w-0 min-h-[calc(100vh-60px)] flex flex-col'>
       {/* Smart Content Header - Fixed at top */}
       <div className='flex-shrink-0 px-4 pt-4 pb-0'>
         <SmartContentHeader
@@ -169,7 +169,8 @@ export default function ProductList({ sector = 'petrolBunk', featureKey = 'produ
         
         </div>
       </div>
-      <SmartAppFooter />
+
+      <SmartAppFooter />  
     </div>
   )
 }
