@@ -7,19 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch'
 import { memo, useState } from 'react'
 import { ArrowLeft, Trash2 } from 'lucide-react'
-
-// Mock data for demonstration
-const mockProducts = [
-  { id: 1, name: 'diesel001', category: 'Fuel', price: 103.00, uom: 'Ltr', status: 'Active', createdAt: 'Sep 17 2025, 12:00 AM', portfolio: 'Island1' },
-  { id: 2, name: 'petrol1', category: 'Fuel', price: 105.80, uom: 'Ltr', status: 'Active', createdAt: 'Sep 18 2025, 12:00 AM', portfolio: 'Island2' },
-  { id: 3, name: 'HSD', category: 'Fuel', price: 250.00, uom: 'Ltr', status: 'Active', createdAt: 'Sep 19 2025, 12:00 AM', portfolio: 'Island1' },
-  { id: 4, name: 'test00909', category: 'Others', price: 230.45, uom: 'Ltr', status: 'Active', createdAt: 'Sep 20 2025, 12:00 AM', portfolio: 'Island3' },
-  { id: 5, name: 'diesel', category: 'Fuel', price: 90.00, uom: 'Ltr', status: 'Active', createdAt: 'Sep 21 2025, 12:00 AM', portfolio: 'Island2' },
-  { id: 6, name: 'testsnjnskndnhd', category: 'Others', price: 6.00, uom: 'Ltr', status: 'Active', createdAt: 'Sep 22 2025, 12:00 AM', portfolio: 'Island1' },
-  { id: 7, name: 'petrol', category: 'Fuel', price: 12.00, uom: 'Ltr', status: 'Active', createdAt: 'Sep 23 2025, 12:00 AM', portfolio: 'Island3' },
-  { id: 8, name: 'petrol', category: 'Fuel', price: 1000.00, uom: 'Ltr', status: 'Active', createdAt: 'Sep 24 2025, 12:00 AM', portfolio: 'Island2' },
-  { id: 9, name: 'fruity', category: 'Others', price: 80.09, uom: 'Pcs', status: 'Inactive', createdAt: 'Sep 25 2025, 12:00 AM', portfolio: 'Island1' },
-]
+import { mockPetrolBunkProducts, type Product } from '@/data/mockProducts'
 
 interface ProductDetailsProps {
   productId: string
@@ -30,8 +18,12 @@ const ProductDetails = memo(function ProductDetails({ productId, onBack }: Produ
   const [modifyPrice, setModifyPrice] = useState(false)
   const [selectedDate, setSelectedDate] = useState('2025-10-02')
 
+  // Debug: Log the productId being passed
+  console.log('ProductDetails received productId:', productId)
+  console.log('Available product IDs:', mockPetrolBunkProducts.map(p => p.id))
+
   // Find the product by ID
-  const product = mockProducts.find(p => p.id.toString() === productId)
+  const product = mockPetrolBunkProducts.find(p => p.id === productId)
 
   if (!product) {
     return (
@@ -71,13 +63,13 @@ const ProductDetails = memo(function ProductDetails({ productId, onBack }: Produ
             <div className="space-y-4">
               <div>
                 <Label className="text-sm font-medium text-gray-700">Product Name</Label>
-                <p className="text-lg font-semibold text-gray-900">{product.name}</p>
+                <p className="text-lg font-semibold text-gray-900">{product.product_name}</p>
               </div>
               
               <div>
                 <Label className="text-sm font-medium text-gray-700">Current Price</Label>
                 <div className="flex items-center space-x-3">
-                  <p className="text-lg font-semibold text-gray-900">₹{product.price.toFixed(2)} as of {selectedDate}</p>
+                  <p className="text-lg font-semibold text-gray-900">₹{product.price} as of {selectedDate}</p>
                   <div className="flex items-center space-x-2">
                     <Label htmlFor="modify-price" className="text-sm">Modify Price</Label>
                     <Switch
@@ -91,12 +83,12 @@ const ProductDetails = memo(function ProductDetails({ productId, onBack }: Produ
               
               <div>
                 <Label className="text-sm font-medium text-gray-700">Created At</Label>
-                <p className="text-lg text-gray-900">{product.createdAt}</p>
+                <p className="text-lg text-gray-900">{product.created_at ? new Date(product.created_at).toLocaleDateString() : 'N/A'}</p>
               </div>
               
               <div>
                 <Label className="text-sm font-medium text-gray-700">Status</Label>
-                <Select defaultValue={product.status}>
+                <Select defaultValue={product.is_active ? 'Active' : 'Inactive'}>
                   <SelectTrigger className="w-32">
                     <SelectValue />
                   </SelectTrigger>
@@ -112,22 +104,43 @@ const ProductDetails = memo(function ProductDetails({ productId, onBack }: Produ
             <div className="space-y-4">
               <div>
                 <Label className="text-sm font-medium text-gray-700">Category</Label>
-                <p className="text-lg text-gray-900">{product.category}</p>
+                <p className="text-lg text-gray-900">{product.category || 'N/A'}</p>
               </div>
               
               <div>
                 <Label className="text-sm font-medium text-gray-700">UOM</Label>
-                <p className="text-lg text-gray-900">{product.uom}</p>
+                <p className="text-lg text-gray-900">{product.uom || 'N/A'}</p>
               </div>
               
               <div>
-                <Label className="text-sm font-medium text-gray-700">Linked Portfolio</Label>
-                <Button variant="outline" className="mt-2">
-                  {product.portfolio}
-                </Button>
+                <Label className="text-sm font-medium text-gray-700">SKU</Label>
+                <p className="text-lg text-gray-900">{product.sku || 'N/A'}</p>
+              </div>
+              
+              <div>
+                <Label className="text-sm font-medium text-gray-700">Supplier</Label>
+                <p className="text-lg text-gray-900">{product.supplier || 'N/A'}</p>
+              </div>
+              
+              <div>
+                <Label className="text-sm font-medium text-gray-700">Stock Count</Label>
+                <p className="text-lg text-gray-900">{product.stock_count || 0}</p>
+              </div>
+              
+              <div>
+                <Label className="text-sm font-medium text-gray-700">Availability</Label>
+                <p className="text-lg text-gray-900">{product.availability}</p>
               </div>
             </div>
           </div>
+          
+          {/* Description Section */}
+          {product.description && (
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <Label className="text-sm font-medium text-gray-700">Description</Label>
+              <p className="text-lg text-gray-900 mt-2">{product.description}</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
@@ -135,3 +148,4 @@ const ProductDetails = memo(function ProductDetails({ productId, onBack }: Produ
 })
 
 export default ProductDetails
+

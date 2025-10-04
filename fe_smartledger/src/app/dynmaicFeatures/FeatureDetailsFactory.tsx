@@ -6,13 +6,7 @@ import { SmartLoadingSpinner } from '@/components/Shared/Loader/SmartLoadingSpin
 
 // Dynamic feature details component registry
 const FEATURE_DETAILS_REGISTRY = {
-  product: () => import('@/app/screens/features/product/ProductDetails'),
-  customer: () => import('@/app/screens/features/customer/CustomerDetails'),
-  inventory: () => import('@/app/screens/features/inventory/InventoryDetails'),
-  // Easy to add more features:
-  // staff: () => import('@/app/screens/features/staff/StaffDetails'),
-  // credit: () => import('@/app/screens/features/credit/CreditDetails'),
-  // cashflow: () => import('@/app/screens/features/cashflow/CashflowDetails'),
+  product: () => import('@/app/screens/features/product/details'),
 } as const
 
 export type FeatureDetailsKey = keyof typeof FEATURE_DETAILS_REGISTRY
@@ -66,17 +60,13 @@ export const FeatureDetailsFactory = memo(function FeatureDetailsFactory({
   }
 
   if (Component) {
-    // Pass appropriate props based on feature type
     const props = {
       productId: itemId,
-      customerId: itemId,
-      inventoryId: itemId,
       onBack
     }
     return <Component {...props} />
   }
 
-  // Fallback for features without details components
   return (
     <Card>
       <CardHeader>
@@ -89,13 +79,3 @@ export const FeatureDetailsFactory = memo(function FeatureDetailsFactory({
     </Card>
   )
 })
-
-// Check if feature has details component
-export function hasFeatureDetails(featureKey: string): featureKey is FeatureDetailsKey {
-  return featureKey in FEATURE_DETAILS_REGISTRY
-}
-
-// Get all features with details components
-export function getFeaturesWithDetails(): FeatureDetailsKey[] {
-  return Object.keys(FEATURE_DETAILS_REGISTRY) as FeatureDetailsKey[]
-}

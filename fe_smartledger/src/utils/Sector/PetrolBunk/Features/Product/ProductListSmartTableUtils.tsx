@@ -80,11 +80,11 @@ export const renderWithStartAdornment = (renderType: CellRenderType, headerText:
 }
 
 // Individual cell renderers
-const renderProductName = ({ value, onClick }: CellRendererProps) => (
+const renderProductName = ({ value, row, onClick }: CellRendererProps) => (
   <div className='font-medium'>
     <ProductLink
       productName={value}
-      onClick={() => onClick?.(value)}
+      onClick={() => onClick?.(row.original)}
       size="sm"
       className="whitespace-nowrap"
     />

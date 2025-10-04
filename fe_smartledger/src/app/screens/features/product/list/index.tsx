@@ -2,13 +2,20 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { TrashIcon, PlusIcon, PackageIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import { SmartTable, SmartTableToolbar, SmartContentHeader, SmartAppFooter } from '@/components/Shared'
 import { mockPetrolBunkProducts, type Product } from '@/data/mockProducts'
 import { generateColumns, PRODUCT_LIST_COLUMNS } from '@/utils/Sector/PetrolBunk/Features/Product/ProductListSmartTableUtils'
 
-export default function ProductList() {
+interface ProductListProps {
+  sector?: string
+  featureKey?: string
+}
+
+export default function ProductList({ sector = 'petrolBunk', featureKey = 'product' }: ProductListProps) {
+  const router = useRouter()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([])
@@ -16,7 +23,8 @@ export default function ProductList() {
   // Event handlers
   const handleProductClick = (product: Product) => {
     console.log('Product clicked:', product)
-    // Add your product click handler here
+    // Navigate to product details page
+    router.push(`/${sector}/${featureKey}/${product.id}`)
   }
 
   const handleEdit = (product: Product) => {

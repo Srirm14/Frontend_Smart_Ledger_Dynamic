@@ -1,14 +1,15 @@
 // Feature registry for dynamic module loading
 export const featureRegistry = {
-  product: () => import('../app/features/product'),
-  dashboard: () => import('../app/features/dashboard'),
-  inventory: () => import('../app/features/inventory'),
-  staff: () => import('../app/features/staff'),
-  customer: () => import('../app/features/customer'),
-  credit: () => import('../app/features/credit'),
-  cashflow: () => import('../app/features/cashflow'),
-  tally: () => import('../app/features/tally'),
-  reports: () => import('../app/features/reports'),
+  product: () => import('../app/screens/features/product/list'),
+  // Only include features that actually exist with index.tsx files
+  // dashboard: () => import('../app/screens/features/dashboard'),
+  // inventory: () => import('../app/screens/features/inventory'),
+  // staff: () => import('../app/screens/features/staff'),
+  // customer: () => import('../app/screens/features/customer'),
+  // credit: () => import('../app/screens/features/credit'),
+  // cashflow: () => import('../app/screens/features/cashflow'),
+  // tally: () => import('../app/screens/features/tally'),
+  // reports: () => import('../app/screens/features/reports'),
 } as const
 
 export type FeatureKey = keyof typeof featureRegistry
@@ -29,14 +30,7 @@ export const isFeatureAvailable = (featureKey: string): featureKey is FeatureKey
 export const getFeatureDisplayName = (featureKey: FeatureKey): string => {
   const displayNames: Record<FeatureKey, string> = {
     product: 'Product',
-    dashboard: 'Dashboard',
-    inventory: 'Inventory',
-    staff: 'Staff',
-    customer: 'Customer',
-    credit: 'Credit',
-    cashflow: 'Cashflow',
-    tally: 'Tally',
-    reports: 'Reports',
+    // Add display names for other features as they're implemented
   }
   return displayNames[featureKey] || featureKey
 }
