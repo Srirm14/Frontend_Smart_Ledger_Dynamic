@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { EditIcon, TrashIcon, PlusIcon, MoreHorizontalIcon, CheckCircleIcon, XCircleIcon, PackageIcon } from 'lucide-react'
+import { EditIcon, TrashIcon, PlusIcon, CheckCircleIcon, XCircleIcon, PackageIcon } from 'lucide-react'
 
 import type { ColumnDef } from '@tanstack/react-table'
 
@@ -258,12 +258,12 @@ export default function ProductList() {
       {/* Smart Content Header - Fixed at top */}
       <div className='flex-shrink-0 px-4 pt-4 pb-0'>
         <SmartContentHeader
-          icon={<PackageIcon className='h-8 w-8 text-primary-500' />}
+          icon={<PackageIcon className='size-7 text-primary-500' />}
           title="Product Management"
           className='mb-2'
           subtitle="Manage your product inventory, pricing, and availability"
           stats={[
-            { label: 'Total Products', value: products.length, color: 'default' },
+            { label: 'Products', value: products.length, color: 'default' },
             { label: 'Active', value: products.filter(p => p.is_active !== false).length, color: 'primary' },
             { label: 'Inactive', value: products.filter(p => p.is_active === false).length, color: 'default' }
           ]}
@@ -296,7 +296,7 @@ export default function ProductList() {
                 </Button>
                 <Button className='bg-primary-600 hover:bg-primary-700 text-white shadow-lg'>
                   <PlusIcon className='h-4 w-4 mr-2' />
-                  Add Product
+                  Create Product
                 </Button>
               </>
             }
@@ -311,7 +311,8 @@ export default function ProductList() {
               rowContainerHeight='max-h-[calc(100vh-390px)]'
               onRowSelect={handleRowSelect}
               loading={loading}
-              emptyMessage='No products found. Add some products to get started.'
+              emptyTitle='No products found'
+              emptyMessage='Create some products to get started.'
               paginationConfig={{
                 pageSize: 15,
                 pageSizeOptions: [10, 15, 25, 50, 100],

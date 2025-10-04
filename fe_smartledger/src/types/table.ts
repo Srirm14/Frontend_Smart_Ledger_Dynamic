@@ -1,4 +1,5 @@
 import type { ColumnDef, PaginationState, SortingState } from '@tanstack/react-table'
+import type { ReactNode } from 'react'
 
 export interface TableConfig<T> {
   data: T[]
@@ -14,6 +15,7 @@ export interface TableConfig<T> {
   emptyMessage?: string
   className?: string
   rowContainerHeight?: string
+  children?: ReactNode
 }
 
 export interface PaginationConfig {
@@ -41,6 +43,8 @@ export interface BulkAction<T> {
 }
 
 export interface SmartTableProps<T> extends TableConfig<T> {
+  emptyTitle?: string
+  emptyMessage?: string
   paginationConfig?: PaginationConfig
   actions?: TableAction<T>[]
   bulkActions?: BulkAction<T>[]

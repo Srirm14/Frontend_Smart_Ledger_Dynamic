@@ -26,8 +26,12 @@ export function SmartContentHeader({
     switch (color) {
       case 'primary':
         return 'text-primary-600'
-      default:
+      case 'default':
+        return 'text-gray-600'
+      case 'black':
         return 'text-black'
+      default:
+        return 'text-gray-600'
     }
   }
 
@@ -57,10 +61,10 @@ export function SmartContentHeader({
           {stats.length > 0 && (
             <div className='flex items-center space-x-6'>
               {stats.map((stat, index) => (
-                <div key={index} className='text-sm text-gray-500'>
+                <div key={index} className='text-sm'>
                   <span className={`font-semibold ${getStatColor(stat.color)}`}>
                     {stat.value}
-                  </span> <span className='text-sm font-medium'>{stat.label}</span>
+                  </span> <span className={`text-sm font-medium ${getStatColor(stat.color)}`}>{stat.label}</span>
                 </div>
               ))}
             </div>

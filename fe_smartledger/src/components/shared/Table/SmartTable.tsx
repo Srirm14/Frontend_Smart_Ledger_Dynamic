@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon } from 'lucide-react'
+import Image from 'next/image'
 
 import type { ColumnDef, PaginationState, SortingState, ColumnMeta } from '@tanstack/react-table'
 
@@ -44,9 +45,11 @@ function SmartTable<T>({
   onSortChange,
   onPaginationChange,
   loading = false,
-  emptyMessage = 'No results found.',
+  emptyTitle = 'No data available',
+  emptyMessage = 'There are no items to display at the moment.',
   className,
   rowContainerHeight,
+  children,
   paginationConfig = {
     pageSize: 10,
     pageSizeOptions: [5, 10, 25, 50],
@@ -164,242 +167,254 @@ function SmartTable<T>({
   const useFlexSizing = useMemo(() => shouldUseFlexSizing(), [shouldUseFlexSizing])
   const heightClass = useMemo(() => getHeightClass(), [getHeightClass])
 
+  // Default empty state component using the SVG from assets
+  const DefaultEmptyState = () => (
+    <div className="flex flex-col items-center justify-center h-full py-12">
+      <div className="w-64 h-64 mb-6">
+        <Image 
+          src={'/assets/illustrations/EmptyState/smartTableEmptyState.svg'}
+          alt="Empty table state"
+          width={256}
+          height={256}
+          className="object-contain"
+          priority
+        />
+      </div>
+      <div className="text-center">
+        <h3 className="text-md font-semibold text-gray-600 mb-2">{emptyTitle}</h3>
+        <p className="text-sm font-normal text-gray-500">{emptyMessage}</p>
+      </div>
+    </div>
+  )
+
   return (
     <div className={cn('w-full space-y-4', useFlexSizing ? 'flex flex-col h-full' : '', className)}>
 
       {/* Loading State - Show loader instead of entire table */}
       {loading ? (
-        <div className={cn('rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full h-screen', useFlexSizing ? 'flex-1 flex flex-col' : '', heightClass)}>
+        <div className={cn('rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden w-full max-w-full h-screen', useFlexSizing ? 'flex-1 flex flex-col' : '', heightClass)}>
           <div className="flex items-center justify-center h-full">
             <SmartLoadingSpinner size="md" className="py-0" />
           </div>
         </div>
+      ) : true ? (
+        /* Empty State - Show empty state instead of entire table */
+        <div className={cn('rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden w-full max-w-full h-screen', useFlexSizing ? 'flex-1 flex flex-col' : '', heightClass)}>
+          {children ? children : <DefaultEmptyState />}
+        </div>
       ) : (
-        <>
-          {/* Table Container with Single Scroll Container */}
-          <div className={cn('rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full', useFlexSizing ? 'flex-1 flex flex-col' : '')}>
-            {/* Single Scroll Container - handles both horizontal and vertical scroll */}
-            <div className={cn('overflow-auto w-full scrollbar-thin', heightClass, useFlexSizing ? 'flex-1' : '')}>
-              <table className='w-full table-auto min-w-full border-collapse'>
-                {/* Header */}
-                <thead className='bg-gray-50'>
-                  {table.getHeaderGroups().map(headerGroup => (
-                    <TableRow key={headerGroup.id} className='hover:bg-transparent'>
-                      {headerGroup.headers.map(header => {
-                        return (
-                          <TableHead 
-                            key={header.id} 
-                            className={cn(
-                              'h-12 font-semibold text-gray-900 border-l border-r border-b first:border-l-0 last:border-r-0 px-4 text-left whitespace-nowrap sticky top-0 z-10 bg-gray-50 rounded-lg  ',
-                              header.column.columnDef.meta?.sticky === 'left' && 'sticky left-0 z-[99999]'
-                            )}
-                            style={header.column.columnDef.meta?.sticky === 'left' ? {
-                              position: 'sticky',
-                              top: 0,
-                              left: 0,
-                              zIndex: 99999
-                            } : undefined}
-                            data-sticky={header.column.columnDef.meta?.sticky}
-                          >
-                            {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                              <div
-                                className={cn(
-                                  'group flex h-full cursor-pointer items-center justify-between gap-2 select-none hover:bg-gray-100 px-2 py-2 rounded transition-colors'
-                                )}
-                                onClick={header.column.getToggleSortingHandler()}
-                                onKeyDown={e => {
-                                  if (header.column.getCanSort() && (e.key === 'Enter' || e.key === ' ')) {
-                                    e.preventDefault()
-                                    header.column.getToggleSortingHandler()?.(e)
-                                  }
-                                }}
-                                tabIndex={header.column.getCanSort() ? 0 : undefined}
-                              >
-                                <span className='flex-1 truncate'>
-                                  {flexRender(header.column.columnDef.header, header.getContext())}
-                                </span>
-                                <div className='opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0'>
-                                  {{
-                                    asc: <ChevronUpIcon className='shrink-0 text-gray-600' size={16} aria-hidden='true' />,
-                                    desc: <ChevronDownIcon className='shrink-0 text-gray-600' size={16} aria-hidden='true' />
-                                  }[header.column.getIsSorted() as string] ?? (
-                                    <div className='flex flex-col'>
-                                      <ChevronUpIcon className='shrink-0 text-gray-400 -mb-1' size={12} aria-hidden='true' />
-                                      <ChevronDownIcon className='shrink-0 text-gray-400' size={12} aria-hidden='true' />
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            ) : (
-                              <div className='px-2 py-2 truncate'>
-                                {flexRender(header.column.columnDef.header, header.getContext())}
-                              </div>
-                            )}
-                          </TableHead>
-                        )
-                      })}
-                    </TableRow>
-                  ))}
-                </thead>
-                
-                {/* Body */}
-                <tbody className='bg-white'>
-                  {table.getRowModel().rows?.length ? (
-                    table.getRowModel().rows.map((row, index) => (
-                      <TableRow 
-                        key={row.id} 
-                        data-state={row.getIsSelected() && 'selected'}
-                        className={cn(
-                          'hover:bg-primary-100 transition-colors',
-                          index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50',
-                          row.getIsSelected() && 'bg-primary-100 border-primary-200'
-                        )}
-                      >
-                        {row.getVisibleCells().map(cell => (
-                          <TableCell 
-                            key={cell.id}
-                            className={cn(
-                              'px-4 py-3 text-sm text-left whitespace-nowrap border-l border-r border-b first:border-l-0 last:border-r-0',
-                              cell.column.columnDef.meta?.sticky === 'left' && 'sticky left-0 z-[99998] bg-white'
-                            )}
-                            style={cell.column.columnDef.meta?.sticky === 'left' ? {
-                              position: 'sticky',
-                              left: 0,
-                              zIndex: 99998,
-                              backgroundColor: 'white'
-                            } : undefined}
-                            data-sticky={cell.column.columnDef.meta?.sticky}
-                          >
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={enhancedColumns.length} className='h-32 text-center text-gray-500'>
-                        <div className='flex flex-col items-center justify-center'>
-                          <div className='text-lg font-medium mb-2'>{emptyMessage}</div>
-                          <div className='text-sm text-gray-400'>No data available to display</div>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-        {/* Integrated Pagination Footer */}
-        {enablePagination && (
-          <div className={cn('bg-gray-50 border-t border-gray-200 px-4 py-3', useFlexSizing ? 'flex-shrink-0' : '')}>
-            <div className='flex items-center justify-between gap-3 max-sm:flex-col'>
-              {paginationConfig.showPageInfo && (
-                <div className='flex-1 text-sm whitespace-nowrap flex items-center gap-4'>
-                  <p className='text-gray-600' aria-live='polite'>
-                    Showing page <span className='font-semibold text-gray-900'>{table.getState().pagination.pageIndex + 1}</span> of{' '}
-                    <span className='font-semibold text-gray-900'>{table.getPageCount()}</span>
-                    <span className='ml-2 text-gray-500'>
-                      ({table.getFilteredRowModel().rows.length} total items)
-                    </span>
-                  </p>
-                  {selectedRows.length > 0 && (
-                    <p className='text-black font-medium'>
-                      Total selected: {selectedRows.length}
-                    </p>
-                  )}
-                </div>
-              )}
-
-              <div className='grow flex justify-center'>
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <Button
-                        size='sm'
-                        variant='outline'
-                        className='disabled:pointer-events-none disabled:opacity-50 h-8'
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                        aria-label='Go to previous page'
-                      >
-                        <ChevronLeftIcon size={16} aria-hidden='true' />
-                        <span className='ml-1 hidden sm:inline'>Previous</span>
-                      </Button>
-                    </PaginationItem>
-
-                    {showLeftEllipsis && (
-                      <PaginationItem>
-                        <PaginationEllipsis />
-                      </PaginationItem>
-                    )}
-
-                    {pages.map(page => {
-                      const isActive = page === table.getState().pagination.pageIndex + 1
-
+        /* Table Container with Single Scroll Container */
+        <div className={cn('rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full', useFlexSizing ? 'flex-1 flex flex-col' : '')}>
+          {/* Single Scroll Container - handles both horizontal and vertical scroll */}
+          <div className={cn('overflow-auto w-full scrollbar-thin', heightClass, useFlexSizing ? 'flex-1' : '')}>
+            <table className='w-full table-auto min-w-full border-collapse'>
+              {/* Header */}
+              <thead className='bg-gray-50'>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <TableRow key={headerGroup.id} className='hover:bg-transparent'>
+                    {headerGroup.headers.map(header => {
                       return (
-                        <PaginationItem key={page}>
-                          <Button
-                            size='sm'
-                            variant={isActive ? 'default' : 'outline'}
-                            className='h-8 w-8'
-                            onClick={() => table.setPageIndex(page - 1)}
-                            aria-current={isActive ? 'page' : undefined}
-                          >
-                            {page}
-                          </Button>
-                        </PaginationItem>
+                        <TableHead 
+                          key={header.id} 
+                          className={cn(
+                            'h-12 font-semibold text-gray-900 border-l border-r border-b first:border-l-0 last:border-r-0 px-4 text-left whitespace-nowrap sticky top-0 z-10 bg-gray-50 rounded-lg  ',
+                            header.column.columnDef.meta?.sticky === 'left' && 'sticky left-0 z-[99999]'
+                          )}
+                          style={header.column.columnDef.meta?.sticky === 'left' ? {
+                            position: 'sticky',
+                            top: 0,
+                            left: 0,
+                            zIndex: 99999
+                          } : undefined}
+                          data-sticky={header.column.columnDef.meta?.sticky}
+                        >
+                          {header.isPlaceholder ? null : header.column.getCanSort() ? (
+                            <div
+                              className={cn(
+                                'group flex h-full cursor-pointer items-center justify-between gap-2 select-none hover:bg-gray-100 px-2 py-2 rounded transition-colors'
+                              )}
+                              onClick={header.column.getToggleSortingHandler()}
+                              onKeyDown={e => {
+                                if (header.column.getCanSort() && (e.key === 'Enter' || e.key === ' ')) {
+                                  e.preventDefault()
+                                  header.column.getToggleSortingHandler()?.(e)
+                                }
+                              }}
+                              tabIndex={header.column.getCanSort() ? 0 : undefined}
+                            >
+                              <span className='flex-1 truncate'>
+                                {flexRender(header.column.columnDef.header, header.getContext())}
+                              </span>
+                              <div className='opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0'>
+                                {{
+                                  asc: <ChevronUpIcon className='shrink-0 text-gray-600' size={16} aria-hidden='true' />,
+                                  desc: <ChevronDownIcon className='shrink-0 text-gray-600' size={16} aria-hidden='true' />
+                                }[header.column.getIsSorted() as string] ?? (
+                                  <div className='flex flex-col'>
+                                    <ChevronUpIcon className='shrink-0 text-gray-400 -mb-1' size={12} aria-hidden='true' />
+                                    <ChevronDownIcon className='shrink-0 text-gray-400' size={12} aria-hidden='true' />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ) : (
+                            <div className='px-2 py-2 truncate'>
+                              {flexRender(header.column.columnDef.header, header.getContext())}
+                            </div>
+                          )}
+                        </TableHead>
                       )
                     })}
-
-                    {showRightEllipsis && (
-                      <PaginationItem>
-                        <PaginationEllipsis />
-                      </PaginationItem>
+                  </TableRow>
+                ))}
+              </thead>
+              
+              {/* Body */}
+              <tbody className='bg-white'>
+                {table.getRowModel().rows.map((row, index) => (
+                  <TableRow 
+                    key={row.id} 
+                    data-state={row.getIsSelected() && 'selected'}
+                    className={cn(
+                      'hover:bg-primary-100 transition-colors',
+                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50',
+                      row.getIsSelected() && 'bg-primary-100 border-primary-200'
                     )}
-
-                    <PaginationItem>
-                      <Button
-                        size='sm'
-                        variant='outline'
-                        className='disabled:pointer-events-none disabled:opacity-50 h-8'
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                        aria-label='Go to next page'
-                      >
-                        <span className='mr-1 hidden sm:inline'>Next</span>
-                        <ChevronRightIcon size={16} aria-hidden='true' />
-                      </Button>
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
-
-              {paginationConfig.showPageSizeSelector && (
-                <div className='flex flex-1 justify-end'>
-                  <Select
-                    value={table.getState().pagination.pageSize.toString()}
-                    onValueChange={value => {
-                      table.setPageSize(Number(value))
-                    }}
                   >
-                    <SelectTrigger id='results-per-page' className='w-fit whitespace-nowrap h-8' aria-label='Results per page'>
-                      <SelectValue placeholder='Select number of results' />
-                    </SelectTrigger>
-                    <SelectContent className='bg-white border border-gray-200 shadow-lg'>
-                      {paginationConfig.pageSizeOptions?.map(size => (
-                        <SelectItem key={size} value={size.toString()} className='bg-white hover:bg-gray-50'>
-                          {size} per page
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            </div>
+                    {row.getVisibleCells().map(cell => (
+                      <TableCell 
+                        key={cell.id}
+                        className={cn(
+                          'px-4 py-3 text-sm text-left whitespace-nowrap border-l border-r border-b first:border-l-0 last:border-r-0',
+                          cell.column.columnDef.meta?.sticky === 'left' && 'sticky left-0 z-[99998] bg-white'
+                        )}
+                        style={cell.column.columnDef.meta?.sticky === 'left' ? {
+                          position: 'sticky',
+                          left: 0,
+                          zIndex: 99998,
+                          backgroundColor: 'white'
+                        } : undefined}
+                        data-sticky={cell.column.columnDef.meta?.sticky}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </tbody>
+            </table>
           </div>
-          )}
+
+      {/* Integrated Pagination Footer */}
+      {enablePagination && (
+        <div className={cn('bg-gray-50 border-t border-gray-200 px-4 py-3', useFlexSizing ? 'flex-shrink-0' : '')}>
+          <div className='flex items-center justify-between gap-3 max-sm:flex-col'>
+            {paginationConfig.showPageInfo && (
+              <div className='flex-1 text-sm whitespace-nowrap flex items-center gap-4'>
+                <p className='text-gray-600' aria-live='polite'>
+                  Showing page <span className='font-semibold text-gray-900'>{table.getState().pagination.pageIndex + 1}</span> of{' '}
+                  <span className='font-semibold text-gray-900'>{table.getPageCount()}</span>
+                  <span className='ml-2 text-gray-500'>
+                    ({table.getFilteredRowModel().rows.length} total items)
+                  </span>
+                </p>
+                {selectedRows.length > 0 && (
+                  <p className='text-black font-medium'>
+                    Total selected: {selectedRows.length}
+                  </p>
+                )}
+              </div>
+            )}
+
+            <div className='grow flex justify-center'>
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <Button
+                      size='sm'
+                      variant='outline'
+                      className='disabled:pointer-events-none disabled:opacity-50 h-8'
+                      onClick={() => table.previousPage()}
+                      disabled={!table.getCanPreviousPage()}
+                      aria-label='Go to previous page'
+                    >
+                      <ChevronLeftIcon size={16} aria-hidden='true' />
+                      <span className='ml-1 hidden sm:inline'>Previous</span>
+                    </Button>
+                  </PaginationItem>
+
+                  {showLeftEllipsis && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
+
+                  {pages.map(page => {
+                    const isActive = page === table.getState().pagination.pageIndex + 1
+
+                    return (
+                      <PaginationItem key={page}>
+                        <Button
+                          size='sm'
+                          variant={isActive ? 'default' : 'outline'}
+                          className='h-8 w-8'
+                          onClick={() => table.setPageIndex(page - 1)}
+                          aria-current={isActive ? 'page' : undefined}
+                        >
+                          {page}
+                        </Button>
+                      </PaginationItem>
+                    )
+                  })}
+
+                  {showRightEllipsis && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
+
+                  <PaginationItem>
+                    <Button
+                      size='sm'
+                      variant='outline'
+                      className='disabled:pointer-events-none disabled:opacity-50 h-8'
+                      onClick={() => table.nextPage()}
+                      disabled={!table.getCanNextPage()}
+                      aria-label='Go to next page'
+                    >
+                      <span className='mr-1 hidden sm:inline'>Next</span>
+                      <ChevronRightIcon size={16} aria-hidden='true' />
+                    </Button>
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+
+            {paginationConfig.showPageSizeSelector && (
+              <div className='flex flex-1 justify-end'>
+                <Select
+                  value={table.getState().pagination.pageSize.toString()}
+                  onValueChange={value => {
+                    table.setPageSize(Number(value))
+                  }}
+                >
+                  <SelectTrigger id='results-per-page' className='w-fit whitespace-nowrap h-8' aria-label='Results per page'>
+                    <SelectValue placeholder='Select number of results' />
+                  </SelectTrigger>
+                  <SelectContent className='bg-white border border-gray-200 shadow-lg'>
+                    {paginationConfig.pageSizeOptions?.map(size => (
+                      <SelectItem key={size} value={size.toString()} className='bg-white hover:bg-gray-50'>
+                        {size} per page
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
         </div>
-        </>
+        )}
+      </div>
       )}
     </div>
   )

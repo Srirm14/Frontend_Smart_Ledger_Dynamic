@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Edit, ToggleLeft, Trash2, CheckCircle, XCircle } from 'lucide-react'
+import { EllipsisVertical, Edit, Trash2, CheckCircle, XCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export interface ActionItem {
@@ -55,7 +55,7 @@ const SmartTableActionPopover = ({ actions, rowData }: SmartTableActionPopoverPr
           onClick={(e) => e.stopPropagation()}
         >
           <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="h-4 w-4" />
+          <EllipsisVertical className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 

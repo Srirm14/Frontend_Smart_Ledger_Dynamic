@@ -2,6 +2,8 @@
 
 import { ReactNode } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
+import type { ActionItem } from './SmartTableActionPopover'
+import SmartTableActionPopover from './SmartTableActionPopover'
 
 interface SmartTableToolbarProps {
   children: ReactNode
@@ -10,6 +12,9 @@ interface SmartTableToolbarProps {
   className?: string
   height?: string | number
   minTableHeight?: string | number
+  selectedItems?: any[]
+  onBulkAction?: (action: string, items: any[]) => void
+  bulkActions?: ActionItem[]
 }
 
 export function SmartTableToolbar({
@@ -18,7 +23,10 @@ export function SmartTableToolbar({
   actions,
   className = '',
   height,
-  minTableHeight
+  minTableHeight,
+  selectedItems = [],
+  onBulkAction,
+  bulkActions = []
 }: SmartTableToolbarProps) {
   // Only apply manual height when explicitly provided
   const cardStyle = height ? { height: typeof height === 'number' ? `${height}px` : height } : {}
@@ -32,16 +40,27 @@ export function SmartTableToolbar({
       style={cardStyle}
     >
       {/* Toolbar Section - Natural height */}
-      {(title || actions) && (
+      {(title || actions || selectedItems.length > 0) && (
         <div className='flex items-center justify-between bg-white p-4 rounded-t-lg border-b flex-shrink-0'>
           <div className='flex items-center space-x-2'>
             <h3 className='text-lg font-semibold text-gray-800'>{title}</h3>
           </div>
-          {actions && (
-            <div className='flex items-center space-x-3'>
-              {actions}
-            </div>
-          )}
+          <div className='flex items-center space-x-3'>
+            {/* Regular Actions - Always show */}
+            {actions && (
+              <div className='flex items-center space-x-3'>
+                {actions}
+              </div>
+            )}
+            {/* Bulk Actions - Show when items are selected */}
+            {selectedItems.length > 0 && bulkActions.length > 0 && (
+              <div className='flex items-center space-x-2'>
+                <SmartTableActionPopover
+                  actions={bulkActions} 
+                />
+              </div>
+            )}
+          </div>
         </div>
       )}
       
