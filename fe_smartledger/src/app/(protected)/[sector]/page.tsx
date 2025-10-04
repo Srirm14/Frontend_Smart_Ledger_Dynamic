@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useSectorStore } from '@/store/sector-store'
+import { SmartLoadingSpinner } from '@/components/Shared/Loader/SmartLoadingSpinner'
 
 export default function SectorPage() {
   const router = useRouter()
@@ -22,7 +23,7 @@ export default function SectorPage() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <SmartLoadingSpinner size="md" className="mb-4" />
         <p className="text-gray-600">Redirecting to {activeSector.name}...</p>
       </div>
     </div>

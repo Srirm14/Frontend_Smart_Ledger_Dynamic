@@ -9,6 +9,7 @@ import {
   SidebarProvider,
 } from '@/components/ui/sidebar'
 import { useSectorStore } from '@/store/sector-store'
+import { SmartLoadingSpinner } from '@/components/Shared/Loader/SmartLoadingSpinner'
 
 export default function SectorLayout({
   children,
@@ -47,7 +48,7 @@ export default function SectorLayout({
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
+        <SmartLoadingSpinner size="lg" />
       </div>
     )
   }

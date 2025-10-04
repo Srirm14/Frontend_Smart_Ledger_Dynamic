@@ -2,6 +2,7 @@
 
 import { memo, useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { SmartLoadingSpinner } from '@/components/Shared/Loader/SmartLoadingSpinner'
 
 // Dynamic feature details component registry
 const FEATURE_DETAILS_REGISTRY = {
@@ -56,7 +57,7 @@ export const FeatureDetailsFactory = memo(function FeatureDetailsFactory({
       <Card>
         <CardContent className="p-6">
           <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+            <SmartLoadingSpinner size="sm" className="py-0" />
             <span className="ml-2 text-gray-500">Loading {featureKey} details...</span>
           </div>
         </CardContent>
