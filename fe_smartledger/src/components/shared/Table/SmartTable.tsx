@@ -26,7 +26,7 @@ import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } fro
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import {  TableCell, TableHead,  TableRow } from '@/components/ui/table'
 
-import { LoadingSpinner } from '@/components/shared'
+import { SmartLoadingSpinner } from '@/components/shared'
 
 import { usePagination } from '@/hooks/use-pagination'
 import type { SmartTableProps } from '@/types/table'
@@ -171,7 +171,7 @@ function SmartTable<T>({
       {loading ? (
         <div className={cn('rounded-lg border bg-white shadow-sm overflow-hidden w-full max-w-full h-screen', useFlexSizing ? 'flex-1 flex flex-col' : '', heightClass)}>
           <div className="flex items-center justify-center h-full">
-            <LoadingSpinner size="md" className="py-0" />
+            <SmartLoadingSpinner size="md" className="py-0" />
           </div>
         </div>
       ) : (

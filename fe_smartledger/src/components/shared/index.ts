@@ -21,7 +21,7 @@ export { SmartTableToolbar } from './SmartTableToolbar'
 export { SmartContentHeader } from './SmartContentHeader'
 
 // LoadingSpinner
-export { LoadingSpinner } from './LoadingSpinner'
+export { SmartLoadingSpinner } from './SmartLoadingSpinner'
 
 // =======================
 // Form Components

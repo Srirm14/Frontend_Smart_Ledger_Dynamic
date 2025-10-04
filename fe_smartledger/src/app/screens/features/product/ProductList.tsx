@@ -127,7 +127,7 @@ export default function ProductList() {
       header: 'Stock Count',
       accessorKey: 'stock_count',
       cell: ({ row }) => (
-        <div className='text-sm font-semibold text-blue-600 whitespace-nowrap'>
+        <div className='text-sm font-semibold text-primary-600 whitespace-nowrap'>
           {Math.floor(Math.random() * 100) + 1}
         </div>
       )
@@ -284,12 +284,12 @@ export default function ProductList() {
               <>
                 <Button 
                   variant='outline' 
-                  className='border-blue-200 text-blue-700 hover:bg-blue-50'
+                  className='border-primary-200 text-primary-700 hover:bg-primary-50'
                 >
                   <PackageIcon className='h-4 w-4 mr-2' />
                   Import Products
                 </Button>
-                <Button className='bg-blue-600 hover:bg-blue-700 text-white shadow-lg'>
+                <Button className='bg-primary-600 hover:bg-primary-700 text-white shadow-lg'>
                   <PlusIcon className='h-4 w-4 mr-2' />
                   Add Product
                 </Button>

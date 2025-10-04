@@ -1,14 +1,14 @@
 import { cn } from '@/lib/utils'
 
-interface LoadingSpinnerProps {
+interface SmartLoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg'
   className?: string
 }
 
-export function LoadingSpinner({ 
+export function SmartLoadingSpinner({ 
   size = 'md',
   className 
-}: LoadingSpinnerProps) {
+}: SmartLoadingSpinnerProps) {
   const sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-8 w-8',
@@ -25,4 +25,4 @@ export function LoadingSpinner({
   )
 }
 
-export default LoadingSpinner
+export default SmartLoadingSpinner
