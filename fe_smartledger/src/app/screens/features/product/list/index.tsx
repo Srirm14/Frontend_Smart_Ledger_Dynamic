@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { TrashIcon, PlusIcon, PackageIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
-import { Button } from '@/components/ui/button'
+import { SmartButton, DangerButton } from '@/components/Shared/Button'
 import { SmartTable, SmartTableToolbar, SmartContentHeader, SmartAppFooter } from '@/components/Shared'
 import { mockPetrolBunkProducts, type Product } from '@/data/mockProducts'
 import { generateColumns, PRODUCT_LIST_COLUMNS } from '@/utils/Sector/PetrolBunk/Features/Product/ProductListSmartTableUtils'
@@ -92,7 +92,7 @@ export default function ProductList({ sector = 'petrolBunk', featureKey = 'produ
 
 
   return (
-    <div className='w-full max-w-full min-w-0 h-full flex flex-col'>
+    <div className='w-full max-w-full min-w-0 min-h-screen flex flex-col'>
       {/* Smart Content Header - Fixed at top */}
       <div className='flex-shrink-0 px-4 pt-4 pb-0'>
         <SmartContentHeader
@@ -125,17 +125,22 @@ export default function ProductList({ sector = 'petrolBunk', featureKey = 'produ
             ]}
             actions={
               <>
-                <Button 
-                  variant='outline' 
-                  className='border-primary-200 text-primary-700 hover:bg-primary-50'
+                <SmartButton 
+                  variant='outlined' 
+                  color='primary'
+                  size='md'
                 >
                   <PackageIcon className='h-4 w-4 mr-2' />
                   Import Products
-                </Button>
-                <Button className='bg-primary-600 hover:bg-primary-700 text-white shadow-lg'>
+                </SmartButton>
+                <SmartButton 
+                  variant='filled' 
+                  color='primary'
+                  size='md'
+                >
                   <PlusIcon className='h-4 w-4 mr-2' />
                   Create Product
-                </Button>
+                </SmartButton>
               </>
             }
           >
