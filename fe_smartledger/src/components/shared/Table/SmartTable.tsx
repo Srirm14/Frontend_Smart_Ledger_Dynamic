@@ -26,7 +26,7 @@ import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } fro
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import {  TableCell, TableHead,  TableRow } from '@/components/ui/table'
 
-import { SmartLoadingSpinner } from '@/components/shared'
+import { SmartLoadingSpinner } from '@/components/Shared'
 
 import { usePagination } from '@/hooks/use-pagination'
 import type { SmartTableProps } from '@/types/table'

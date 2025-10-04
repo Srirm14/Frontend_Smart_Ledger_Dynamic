@@ -8,7 +8,7 @@ import {
   FormRadioGroup, 
   FormCheckbox, 
   FormAutocomplete 
-} from '@/components/shared/Inputs'
+} from '@/components/Shared/Inputs'
 
 // Formily component wrappers with proper props handling
 export const FormilyInput = (props: any) => {

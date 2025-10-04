@@ -35,8 +35,8 @@ import {
 } from 'lucide-react'
 import { useSectorStore } from '@/store/sector-store'
 import { getFeatureDisplayName } from '@/config/feature-registry'
-import { SectorSelector } from './SectorSelector'
-import { UserProfilePopover } from '@/components/shared/layout/Sidebar/UserProfilePopover'
+import { SectorSelector } from '@/components/Shared/Layout/Sidebar/SectorSelector'
+import { UserProfilePopover } from '@/components/Shared/Layout/Sidebar/UserProfilePopover'
 import { useTheme } from '@/hooks/use-theme'
 
 // Feature data with icons

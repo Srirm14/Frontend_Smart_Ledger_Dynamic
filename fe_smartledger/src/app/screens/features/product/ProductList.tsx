@@ -6,15 +6,9 @@ import { EditIcon, TrashIcon, PlusIcon, MoreHorizontalIcon, CheckCircleIcon, XCi
 import type { ColumnDef } from '@tanstack/react-table'
 
 import { Button } from '@/components/ui/button'
-import { SmartTable, SmartTableToolbar, SmartContentHeader, SmartAppFooter } from '@/components/shared'
+import { SmartTable, SmartTableToolbar, SmartContentHeader, SmartAppFooter, SmartTableActionPopover } from '@/components/Shared'
 import { Badge } from '@/components/ui/badge'
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger,
-  DropdownMenuSeparator 
-} from '@/components/ui/dropdown-menu'
+import type { ActionItem } from '@/components/Shared/Table/SmartTableActionPopover'
 
 import { cn } from '@/lib/utils'
 
@@ -166,43 +160,27 @@ export default function ProductList() {
           // Implement edit functionality
         }
 
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleEdit}>
-                <EditIcon className="mr-2 h-4 w-4" />
-                Edit Product
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleToggleStatus}>
-                {isActive ? (
-                  <>
-                    <XCircleIcon className="mr-2 h-4 w-4" />
-                    Mark as Inactive
-                  </>
-                ) : (
-                  <>
-                    <CheckCircleIcon className="mr-2 h-4 w-4" />
-                    Mark as Active
-                  </>
-                )}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem 
-                onClick={handleDelete}
-                className="text-red-600 focus:text-red-600"
-              >
-                <TrashIcon className="mr-2 h-4 w-4" />
-                Delete Product
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )
+        const actions: ActionItem[] = [
+          {
+            label: 'Edit Product',
+            icon: <EditIcon className="h-4 w-4" />,
+            onClick: handleEdit
+          },
+          {
+            label: isActive ? 'Mark as Inactive' : 'Mark as Active',
+            icon: isActive ? <XCircleIcon className="h-4 w-4" /> : <CheckCircleIcon className="h-4 w-4" />,
+            onClick: handleToggleStatus
+          },
+          {
+            label: 'Delete Product',
+            icon: <TrashIcon className="h-4 w-4" />,
+            onClick: handleDelete,
+            variant: 'destructive',
+            showSeparator: true
+          }
+        ]
+
+        return <SmartTableActionPopover actions={actions} rowData={row.original} />
       },
       enableSorting: false
     }

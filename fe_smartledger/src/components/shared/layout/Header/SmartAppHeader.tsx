@@ -1,8 +1,6 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import {
   Breadcrumb,
@@ -18,8 +16,7 @@ import {
 } from '@/components/ui/sidebar'
 // Removed unused imports
 import { useSectorStore } from '@/store/sector-store'
-import { SectorSelector } from '../Sidebar/SectorSelector'
-import { SmartDatePicker } from '@/components/shared/DatePicker/smartDatePicker'
+import { SmartDatePicker } from '@/components/Shared/DatePicker/smartDatePicker'
 import { useTheme } from '@/hooks/use-theme'
 
 export function SmartAppHeader() {

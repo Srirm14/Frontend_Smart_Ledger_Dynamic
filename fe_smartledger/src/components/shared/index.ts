@@ -3,8 +3,8 @@
 // =======================
 
 // SmartTab
-export { default as SmartTab } from './SmartTab'
-export type { TabItem } from './SmartTab'
+export { default as SmartTab } from './TabSwitch/SmartTab'
+export type { TabItem } from './TabSwitch/SmartTab'
 
 // SmartTable
 export { SmartTable } from './Table/SmartTable'
@@ -15,13 +15,13 @@ export { default as SmartTableActionPopover } from './Table/SmartTableActionPopo
 export type { ActionItem, SmartTableActionPopoverProps } from './Table/SmartTableActionPopover'
 
 // SmartTableToolbar
-export { SmartTableToolbar } from './SmartTableToolbar'
+export { SmartTableToolbar } from './Table/SmartTableToolbar'
 
 // SmartContentHeader
-export { SmartContentHeader } from './SmartContentHeader'
+export { SmartContentHeader } from './Layout/Header/SmartContentHeader'
 
 // LoadingSpinner
-export { SmartLoadingSpinner } from './SmartLoadingSpinner'
+export { SmartLoadingSpinner } from './Loader/SmartLoadingSpinner'
 
 // =======================
 // Form Components
@@ -38,11 +38,11 @@ export { SmartDatePicker } from './DatePicker/smartDatePicker'
 // =======================
 
 // Sidebar
-export { SmartAppSidebar } from './layout/Sidebar/SmartAppSidebar'
-export { UserProfilePopover } from './layout/Sidebar/UserProfilePopover'
+export { SmartAppSidebar } from './Layout/Sidebar/SmartAppSidebar'
+export { UserProfilePopover } from './Layout/Sidebar/UserProfilePopover'
 
 // Header
-export { SmartAppHeader } from './layout/Header/SmartAppHeader'
+export { SmartAppHeader } from './Layout/Header/SmartAppHeader'
 
 // Footer
-export { SmartAppFooter } from './layout/Footer/SmartAppFooter'
+export { SmartAppFooter } from './Layout/Footer/SmartAppFooter'

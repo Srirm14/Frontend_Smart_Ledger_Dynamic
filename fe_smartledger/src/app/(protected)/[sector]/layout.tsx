@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { SmartAppSidebar } from '@/components/shared/layout/Sidebar/SmartAppSidebar'
-import { SmartAppHeader } from '@/components/shared/layout/Header/SmartAppHeader'
+import { SmartAppSidebar } from '@/components/Shared/Layout/Sidebar/SmartAppSidebar'
+import { SmartAppHeader } from '@/components/Shared/Layout/Header/SmartAppHeader'
 import {
   SidebarInset,
   SidebarProvider,
