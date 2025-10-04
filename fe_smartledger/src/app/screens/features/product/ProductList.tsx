@@ -140,6 +140,7 @@ export default function ProductList() {
       header: 'Actions',
       cell: ({ row }) => {
         const isActive = row.original.is_active ?? true
+        const hasMultipleSelections = selectedProducts.length > 1
         
         const handleToggleStatus = () => {
           setProducts(prev => 
@@ -180,7 +181,16 @@ export default function ProductList() {
           }
         ]
 
-        return <SmartTableActionPopover actions={actions} rowData={row.original} />
+        // Disable actions when multiple items are selected
+        const disabledActions = hasMultipleSelections 
+          ? actions.map(action => ({ ...action, onClick: () => {} }))
+          : actions
+
+        return (
+          <div className={hasMultipleSelections ? 'opacity-50 pointer-events-none' : ''}>
+            <SmartTableActionPopover actions={disabledActions} rowData={row.original} />
+          </div>
+        )
       },
       enableSorting: false
     }
@@ -234,6 +244,14 @@ export default function ProductList() {
     setSelectedProducts(selectedRows)
   }, [])
 
+  // Handle bulk delete
+  const handleBulkDelete = useCallback(() => {
+    if (selectedProducts.length === 0) return
+    
+    setProducts(prev => prev.filter(p => !selectedProducts.some(item => item.id === p.id)))
+    setSelectedProducts([])
+  }, [selectedProducts])
+
 
   return (
     <div className='w-full max-w-full min-w-0 h-full flex flex-col'>
@@ -258,6 +276,15 @@ export default function ProductList() {
           {/* Smart Table Toolbar with Actions */}
           <SmartTableToolbar
             title="Actions"
+            selectedItems={selectedProducts}
+            bulkActions={[
+              {
+                label: `Delete ${selectedProducts.length} Selected`,
+                icon: <TrashIcon className="h-4 w-4" />,
+                onClick: handleBulkDelete,
+                variant: 'destructive'
+              }
+            ]}
             actions={
               <>
                 <Button 
