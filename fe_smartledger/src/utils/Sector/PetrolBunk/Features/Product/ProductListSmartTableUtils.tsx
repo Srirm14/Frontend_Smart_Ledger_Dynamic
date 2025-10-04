@@ -1,5 +1,20 @@
 import React from 'react'
-import { EditIcon, TrashIcon, CheckCircleIcon, XCircleIcon } from 'lucide-react'
+import { 
+  EditIcon, 
+  TrashIcon, 
+  CheckCircleIcon, 
+  XCircleIcon,
+  PackageIcon,
+  DollarSignIcon,
+  ActivityIcon,
+  TagIcon,
+  HashIcon,
+  ScaleIcon,
+  FileTextIcon,
+  CalendarIcon,
+  Package2Icon,
+  TruckIcon
+} from 'lucide-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { StatusBadge } from '@/components/Shared/Badge'
 import { ProductLink } from '@/components/Shared/Link'
@@ -33,6 +48,37 @@ interface CellRendererProps {
   selectedItems?: any[]
 }
 
+// Icon mapping for column headers
+const columnIcons: Record<CellRenderType, React.ReactNode> = {
+  productName: <PackageIcon className="h-4 w-4" />,
+  price: <DollarSignIcon className="h-4 w-4" />,
+  status: <ActivityIcon className="h-4 w-4" />,
+  category: <TagIcon className="h-4 w-4" />,
+  sku: <HashIcon className="h-4 w-4" />,
+  uom: <ScaleIcon className="h-4 w-4" />,
+  description: <FileTextIcon className="h-4 w-4" />,
+  date: <CalendarIcon className="h-4 w-4" />,
+  stockCount: <Package2Icon className="h-4 w-4" />,
+  supplier: <TruckIcon className="h-4 w-4" />,
+  actions: null // No icon for actions
+}
+
+// Function to render header with start adornment (icon + text)
+export const renderWithStartAdornment = (renderType: CellRenderType, headerText: string) => {
+  const icon = columnIcons[renderType]
+  
+  if (!icon) {
+    return headerText
+  }
+  
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-gray-700">{icon}</span>
+      <span className="text-gray-800  text-sm font-semibold">{headerText}</span>
+    </div>
+  )
+}
+
 // Individual cell renderers
 const renderProductName = ({ value, onClick }: CellRendererProps) => (
   <div className='font-medium'>
@@ -46,7 +92,7 @@ const renderProductName = ({ value, onClick }: CellRendererProps) => (
 )
 
 const renderPrice = ({ value }: CellRendererProps) => (
-  <div className='font-semibold text-green-600 whitespace-nowrap'>
+  <div className='font-semibold  text-sm text-gray-600 whitespace-nowrap'>
     {formatCurrency(value)}
   </div>
 )
@@ -205,7 +251,7 @@ export const generateColumns = (
   }
 ): ColumnDef<Product>[] => {
   return configs.map(config => ({
-    header: config.header,
+    header: () => renderWithStartAdornment(config.renderType, config.header),
     accessorKey: config.accessorKey,
     cell: ({ row }) => {
       const value = row.getValue(config.accessorKey)
