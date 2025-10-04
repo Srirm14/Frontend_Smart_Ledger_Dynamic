@@ -3,7 +3,14 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon } from 'lucide-react'
 
-import type { ColumnDef, PaginationState, SortingState } from '@tanstack/react-table'
+import type { ColumnDef, PaginationState, SortingState, ColumnMeta } from '@tanstack/react-table'
+
+// Extend ColumnMeta to include our custom sticky property
+declare module '@tanstack/react-table' {
+  interface ColumnMeta<TData, TValue> {
+    sticky?: 'left' | 'right'
+  }
+}
 import {
   flexRender,
   getCoreRowModel,
@@ -57,7 +64,7 @@ function SmartTable<T>({
   const enhancedColumns: ColumnDef<T>[] = [
     ...(enableSelection
       ? [
-          {
+            {
             id: 'select',
             header: ({ table }) => (
               <Checkbox
@@ -74,7 +81,10 @@ function SmartTable<T>({
               />
             ),
             size: 28,
-            enableSorting: false
+            enableSorting: false,
+            meta: {
+              sticky: 'left'
+            }
           } as ColumnDef<T>
         ]
       : []),
@@ -137,7 +147,17 @@ function SmartTable<T>({
                     return (
                       <TableHead 
                         key={header.id} 
-                        className='h-12 bg-gray-50 font-semibold text-gray-900 border-l border-r border-b first:border-l-0 last:border-r-0 px-4 text-left whitespace-nowrap sticky top-0 z-10'
+                        className={cn(
+                          'h-12 font-semibold text-gray-900 border-l border-r border-b first:border-l-0 last:border-r-0 px-4 text-left whitespace-nowrap sticky top-0 z-10 bg-gray-50 rounded-lg  ',
+                          header.column.columnDef.meta?.sticky === 'left' && 'sticky left-0 z-[99999]'
+                        )}
+                        style={header.column.columnDef.meta?.sticky === 'left' ? {
+                          position: 'sticky',
+                          top: 0,
+                          left: 0,
+                          zIndex: 99999
+                        } : undefined}
+                        data-sticky={header.column.columnDef.meta?.sticky}
                       >
                         {header.isPlaceholder ? null : header.column.getCanSort() ? (
                           <div
@@ -205,7 +225,17 @@ function SmartTable<T>({
                     {row.getVisibleCells().map(cell => (
                       <TableCell 
                         key={cell.id}
-                        className='px-4 py-3 text-sm text-left whitespace-nowrap border-l border-r border-b first:border-l-0 last:border-r-0'
+                        className={cn(
+                          'px-4 py-3 text-sm text-left whitespace-nowrap border-l border-r border-b first:border-l-0 last:border-r-0',
+                          cell.column.columnDef.meta?.sticky === 'left' && 'sticky left-0 z-[99998] bg-white'
+                        )}
+                        style={cell.column.columnDef.meta?.sticky === 'left' ? {
+                          position: 'sticky',
+                          left: 0,
+                          zIndex: 99998,
+                          backgroundColor: 'white'
+                        } : undefined}
+                        data-sticky={cell.column.columnDef.meta?.sticky}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
