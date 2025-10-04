@@ -28,16 +28,43 @@ export function SiteHeader() {
   const { toggleSidebar } = useSidebar()
   const { isDark } = useTheme()
   
-  // Get current page name from pathname
-  const getPageName = (path: string) => {
-    if (path.includes('/sales')) return 'Sales'
-    if (path.includes('/inventory')) return 'Inventory'
-    if (path.includes('/credit')) return 'Credit'
-    if (path.includes('/tally')) return 'Tally'
-    return activeSector.name
+  // Parse pathname to get breadcrumb segments
+  const getBreadcrumbSegments = (path: string) => {
+    const segments = path.split('/').filter(Boolean)
+    const breadcrumbs = []
+    
+    // Add sector name (first segment)
+    if (segments.length > 0) {
+      breadcrumbs.push({
+        name: activeSector.name,
+        href: `/${segments[0]}`,
+        isActive: segments.length === 1
+      })
+    }
+    
+    // Add feature name (second segment)
+    if (segments.length > 1) {
+      const featureName = segments[1].charAt(0).toUpperCase() + segments[1].slice(1)
+      breadcrumbs.push({
+        name: featureName,
+        href: `/${segments[0]}/${segments[1]}`,
+        isActive: segments.length === 2
+      })
+    }
+    
+    // Add detail page (third segment)
+    if (segments.length > 2) {
+      breadcrumbs.push({
+        name: `Details`,
+        href: `/${segments[0]}/${segments[1]}/${segments[2]}`,
+        isActive: true
+      })
+    }
+    
+    return breadcrumbs
   }
 
-  const pageName = getPageName(pathname)
+  const breadcrumbSegments = getBreadcrumbSegments(pathname)
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
@@ -49,27 +76,25 @@ export function SiteHeader() {
         />
         <Breadcrumb>
           <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink 
-                href={`/${activeSector.id}`} 
-                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 cursor-pointer"
-                onClick={(e) => {
-                  e.preventDefault()
-                  toggleSidebar()
-                }}
-              >
-                Smart Ledger
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage 
-                className="text-gray-900 dark:text-gray-100 cursor-pointer"
-                onClick={toggleSidebar}
-              >
-                {pageName}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
+            {breadcrumbSegments.map((segment, index) => (
+              <div key={index} className="flex items-center">
+                {index > 0 && <BreadcrumbSeparator />}
+                <BreadcrumbItem>
+                  {segment.isActive ? (
+                    <BreadcrumbPage className="text-gray-900 dark:text-gray-100">
+                      {segment.name}
+                    </BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink 
+                      href={segment.href}
+                      className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 cursor-pointer"
+                    >
+                      {segment.name}
+                    </BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+              </div>
+            ))}
           </BreadcrumbList>
         </Breadcrumb>
       </div>

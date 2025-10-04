@@ -3,10 +3,13 @@ export { default as SmartTab } from './SmartTab'
 export type { TabItem } from './SmartTab'
 
 export { SmartTable } from './Table/SmartTable'
-export type { SmartTableProps } from './Table/SmartTable'
+export type { SmartTableProps } from '@/types/table'
 
 export { default as SmartTableActionPopover } from './Table/SmartTableActionPopover'
 export type { ActionItem, SmartTableActionPopoverProps } from './Table/SmartTableActionPopover'
+
+export { SmartTableToolbar } from './SmartTableToolbar'
+export { SmartContentHeader } from './SmartContentHeader'
 
 
 export { default as SmartFooter } from './layout/SmartFooter'

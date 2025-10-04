@@ -1,15 +1,20 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { EditIcon, TrashIcon, PlusIcon } from 'lucide-react'
+import { EditIcon, TrashIcon, PlusIcon, MoreHorizontalIcon, CheckCircleIcon, XCircleIcon, PackageIcon } from 'lucide-react'
 
 import type { ColumnDef } from '@tanstack/react-table'
 
-
 import { Button } from '@/components/ui/button'
-import { SmartTable } from '@/components/shared/Table/SmartTable'
+import { SmartTable, SmartTableToolbar, SmartContentHeader } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
-
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger,
+  DropdownMenuSeparator 
+} from '@/components/ui/dropdown-menu'
 
 import { cn } from '@/lib/utils'
 
@@ -24,6 +29,7 @@ export interface Product {
   sku?: string
   created_at?: string
   updated_at?: string
+  is_active?: boolean
 }
 
 export default function ProductList() {
@@ -53,6 +59,24 @@ export default function ProductList() {
           ${row.getValue('price')}
         </div>
       )
+    },
+    {
+      header: 'Status',
+      accessorKey: 'is_active',
+      cell: ({ row }) => {
+        const isActive = row.original.is_active ?? true
+        return (
+          <Badge
+            variant={isActive ? 'default' : 'secondary'}
+            className={cn(
+              'whitespace-nowrap',
+              isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+            )}
+          >
+            {isActive ? 'Active' : 'Inactive'}
+          </Badge>
+        )
+      }
     },
     {
       header: 'Category',
@@ -120,35 +144,66 @@ export default function ProductList() {
     {
       id: 'actions',
       header: 'Actions',
-      cell: ({ row }) => (
-        <div className='flex items-center gap-2 whitespace-nowrap'>
-          <Button
-            size='sm'
-            variant='outline'
-            onClick={() => {
-              console.log('Edit product:', row.original)
-              // Implement edit functionality
-            }}
-            className='h-8'
-          >
-            <EditIcon className='h-4 w-4' />
-            Edit
-          </Button>
-          <Button
-            size='sm'
-            variant='destructive'
-            onClick={() => {
-              console.log('Delete product:', row.original)
-              // Implement delete functionality
-              setProducts(prev => prev.filter(p => p.id !== row.original.id))
-            }}
-            className='h-8'
-          >
-            <TrashIcon className='h-4 w-4' />
-            Delete
-          </Button>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const isActive = row.original.is_active ?? true
+        
+        const handleToggleStatus = () => {
+          setProducts(prev => 
+            prev.map(p => 
+              p.id === row.original.id 
+                ? { ...p, is_active: !p.is_active }
+                : p
+            )
+          )
+        }
+
+        const handleDelete = () => {
+          setProducts(prev => prev.filter(p => p.id !== row.original.id))
+        }
+
+        const handleEdit = () => {
+          console.log('Edit product:', row.original)
+          // Implement edit functionality
+        }
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleEdit}>
+                <EditIcon className="mr-2 h-4 w-4" />
+                Edit Product
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleToggleStatus}>
+                {isActive ? (
+                  <>
+                    <XCircleIcon className="mr-2 h-4 w-4" />
+                    Mark as Inactive
+                  </>
+                ) : (
+                  <>
+                    <CheckCircleIcon className="mr-2 h-4 w-4" />
+                    Mark as Active
+                  </>
+                )}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem 
+                onClick={handleDelete}
+                className="text-red-600 focus:text-red-600"
+              >
+                <TrashIcon className="mr-2 h-4 w-4" />
+                Delete Product
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
       enableSorting: false
     }
   ]
@@ -177,7 +232,8 @@ export default function ProductList() {
           description: item.description || '',
           sku: item.sku || `SKU-${index + 1}`,
           created_at: item.created_at || new Date().toISOString(),
-          updated_at: item.updated_at || new Date().toISOString()
+          updated_at: item.updated_at || new Date().toISOString(),
+          is_active: Math.random() > 0.2 // 80% chance of being active
         }))
 
         // Duplicate data for demo purposes
@@ -203,22 +259,37 @@ export default function ProductList() {
 
   return (
     <div className='space-y-6 w-full'>
-      {/* Header */}
-      <div className='flex items-center justify-between'>
-        <div>
-          <h1 className='text-2xl font-bold tracking-tight'>Products</h1>
-          <p className='text-muted-foreground'>
-            Manage your product inventory and details
-          </p>
-        </div>
-        <Button>
-          <PlusIcon className='h-4 w-4 mr-2' />
-          Add Product
-        </Button>
-      </div>
+      {/* Smart Content Header */}
+      <SmartContentHeader
+        icon={<PackageIcon className='h-8 w-8 text-blue-600' />}
+        title="Product Management"
+        subtitle="Manage your product inventory, pricing, and availability"
+        stats={[
+          { label: 'Total Products', value: products.length, color: 'default' },
+          { label: 'Active', value: products.filter(p => p.is_active !== false).length, color: 'green' },
+          { label: 'Inactive', value: products.filter(p => p.is_active === false).length, color: 'gray' }
+        ]}
+      />
 
-      {/* Products Table */}
-      <div className='bg-white rounded-lg shadow-sm border w-full overflow-hidden'>
+      {/* Smart Table Toolbar with Actions */}
+      <SmartTableToolbar
+        title="Actions"
+        actions={
+          <>
+            <Button 
+              variant='outline' 
+              className='border-blue-200 text-blue-700 hover:bg-blue-50'
+            >
+              <PackageIcon className='h-4 w-4 mr-2' />
+              Import Products
+            </Button>
+            <Button className='bg-blue-600 hover:bg-blue-700 text-white shadow-lg'>
+              <PlusIcon className='h-4 w-4 mr-2' />
+              Add Product
+            </Button>
+          </>
+        }
+      >
         <SmartTable
           data={products}
           columns={columns}
@@ -238,8 +309,7 @@ export default function ProductList() {
           }}
           className='h-full'
         />
-      </div>
-
+      </SmartTableToolbar>
     </div>
   )
 }
