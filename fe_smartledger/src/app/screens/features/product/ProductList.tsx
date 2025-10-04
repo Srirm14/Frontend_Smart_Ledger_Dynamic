@@ -1,240 +1,70 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { EditIcon, TrashIcon, PlusIcon, CheckCircleIcon, XCircleIcon, PackageIcon } from 'lucide-react'
-
-import type { ColumnDef } from '@tanstack/react-table'
+import { TrashIcon, PlusIcon, PackageIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { SmartTable, SmartTableToolbar, SmartContentHeader, SmartAppFooter, SmartTableActionPopover } from '@/components/Shared'
-import { Badge } from '@/components/ui/badge'
-import type { ActionItem } from '@/components/Shared/Table/SmartTableActionPopover'
-
-import { cn } from '@/lib/utils'
-
-// Product type definition
-export interface Product {
-  id: string
-  product_name: string
-  price: string
-  availability: 'In Stock' | 'Out of Stock' | 'Limited'
-  category?: string
-  description?: string
-  sku?: string
-  created_at?: string
-  updated_at?: string
-  is_active?: boolean
-}
+import { SmartTable, SmartTableToolbar, SmartContentHeader, SmartAppFooter } from '@/components/Shared'
+import { mockPetrolBunkProducts, type Product } from '@/data/mockProducts'
+import { generateColumns, PRODUCT_LIST_COLUMNS } from '@/utils/Sector/PetrolBunk/Features/Product/ProductListSmartTableUtils'
 
 export default function ProductList() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([])
 
-  // Column definitions with even distribution
-  const columns: ColumnDef<Product>[] = [
-    {
-      header: 'Product Name',
-      accessorKey: 'product_name',
-      cell: ({ row }) => (
-        <div className='font-medium'>
-          <div className='whitespace-nowrap'>{row.getValue('product_name')}</div>
-          {row.original.sku && (
-            <div className='text-xs text-gray-500 whitespace-nowrap'>SKU: {row.original.sku}</div>
-          )}
-        </div>
-      )
-    },
-    {
-      header: 'Price',
-      accessorKey: 'price',
-      cell: ({ row }) => (
-        <div className='font-semibold text-green-600 whitespace-nowrap'>
-          ${row.getValue('price')}
-        </div>
-      )
-    },
-    {
-      header: 'Status',
-      accessorKey: 'is_active',
-      cell: ({ row }) => {
-        const isActive = row.original.is_active ?? true
-        return (
-          <Badge
-            variant={isActive ? 'default' : 'secondary'}
-            className={cn(
-              'whitespace-nowrap',
-              isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
-            )}
-          >
-            {isActive ? 'Active' : 'Inactive'}
-          </Badge>
-        )
-      }
-    },
-    {
-      header: 'Category',
-      accessorKey: 'category',
-      cell: ({ row }) => (
-        <div className='text-sm text-gray-600 whitespace-nowrap'>
-          {row.original.category || 'Uncategorized'}
-        </div>
-      )
-    },
-    {
-      header: 'SKU',
-      accessorKey: 'sku',
-      cell: ({ row }) => (
-        <div className='text-sm text-gray-600 font-mono whitespace-nowrap'>
-          {row.original.sku || 'N/A'}
-        </div>
-      )
-    },
-    {
-      header: 'Description',
-      accessorKey: 'description',
-      cell: ({ row }) => (
-        <div className='text-sm text-gray-600 whitespace-nowrap'>
-          {row.original.description || 'No description available'}
-        </div>
-      )
-    },
-    {
-      header: 'Created Date',
-      accessorKey: 'created_at',
-      cell: ({ row }) => (
-        <div className='text-sm text-gray-600 whitespace-nowrap'>
-          {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'N/A'}
-        </div>
-      )
-    },
-    {
-      header: 'Updated Date',
-      accessorKey: 'updated_at',
-      cell: ({ row }) => (
-        <div className='text-sm text-gray-600 whitespace-nowrap'>
-          {row.original.updated_at ? new Date(row.original.updated_at).toLocaleDateString() : 'N/A'}
-        </div>
-      )
-    },
-    {
-      header: 'Stock Count',
-      accessorKey: 'stock_count',
-      cell: ({ row }) => (
-        <div className='text-sm font-semibold text-primary-600 whitespace-nowrap'>
-          {Math.floor(Math.random() * 100) + 1}
-        </div>
-      )
-    },
-    {
-      header: 'Supplier',
-      accessorKey: 'supplier',
-      cell: ({ row }) => (
-        <div className='text-sm text-gray-600 whitespace-nowrap'>
-          Supplier {Math.floor(Math.random() * 5) + 1}
-        </div>
-      )
-    },
-    {
-      id: 'actions',
-      header: 'Actions',
-      cell: ({ row }) => {
-        const isActive = row.original.is_active ?? true
-        const hasMultipleSelections = selectedProducts.length > 1
-        
-        const handleToggleStatus = () => {
-          setProducts(prev => 
-            prev.map(p => 
-              p.id === row.original.id 
-                ? { ...p, is_active: !p.is_active }
-                : p
-            )
-          )
-        }
+  // Event handlers
+  const handleProductClick = (product: Product) => {
+    console.log('Product clicked:', product)
+    // Add your product click handler here
+  }
 
-        const handleDelete = () => {
-          setProducts(prev => prev.filter(p => p.id !== row.original.id))
-        }
+  const handleEdit = (product: Product) => {
+    console.log('Edit product:', product)
+    // Implement edit functionality
+  }
 
-        const handleEdit = () => {
-          console.log('Edit product:', row.original)
-          // Implement edit functionality
-        }
+  const handleToggleStatus = (product: Product) => {
+    setProducts(prev => 
+      prev.map(p => 
+        p.id === product.id 
+          ? { ...p, is_active: !p.is_active }
+          : p
+      )
+    )
+  }
 
-        const actions: ActionItem[] = [
-          {
-            label: 'Edit Product',
-            icon: <EditIcon className="h-4 w-4" />,
-            onClick: handleEdit
-          },
-          {
-            label: isActive ? 'Mark as Inactive' : 'Mark as Active',
-            icon: isActive ? <XCircleIcon className="h-4 w-4" /> : <CheckCircleIcon className="h-4 w-4" />,
-            onClick: handleToggleStatus
-          },
-          {
-            label: 'Delete Product',
-            icon: <TrashIcon className="h-4 w-4" />,
-            onClick: handleDelete,
-            variant: 'destructive',
-            showSeparator: true
-          }
-        ]
+  const handleDelete = (product: Product) => {
+    setProducts(prev => prev.filter(p => p.id !== product.id))
+  }
 
-        // Disable actions when multiple items are selected
-        const disabledActions = hasMultipleSelections 
-          ? actions.map(action => ({ ...action, onClick: () => {} }))
-          : actions
+  // Generate columns using utility
+  const columns = generateColumns(PRODUCT_LIST_COLUMNS, {
+    onProductClick: handleProductClick,
+    onEdit: handleEdit,
+    onToggleStatus: handleToggleStatus,
+    onDelete: handleDelete,
+    selectedItems: selectedProducts
+  })
 
-        return (
-          <div className={hasMultipleSelections ? 'opacity-50 pointer-events-none' : ''}>
-            <SmartTableActionPopover actions={disabledActions} rowData={row.original} />
-          </div>
-        )
-      },
-      enableSorting: false
-    }
-  ]
-
-  // Fetch products data
+  // Load mock products data
   useEffect(() => {
-    async function fetchProducts() {
+    const loadProducts = () => {
       try {
         setLoading(true)
-        const res = await fetch('https://cdn.jsdelivr.net/gh/themeselection/fy-assets/assets/json/mobile-stock.json')
-
-        if (!res.ok) {
-          throw new Error('Failed to fetch data')
-        }
-
-        const items = await res.json()
-        const data = await items.data
-
-        // Transform data to match our Product interface
-        const transformedData: Product[] = data.map((item: any, index: number) => ({
-          id: item.id || `product-${index}`,
-          product_name: item.product_name || item.name || 'Unknown Product',
-          price: item.price || '0.00',
-          availability: item.availability || 'In Stock',
-          category: item.category || 'Electronics',
-          description: item.description || '',
-          sku: item.sku || `SKU-${index + 1}`,
-          created_at: item.created_at || new Date().toISOString(),
-          updated_at: item.updated_at || new Date().toISOString(),
-          is_active: Math.random() > 0.2 // 80% chance of being active
-        }))
-
-        // Duplicate data for demo purposes
-        setProducts([...transformedData, ...transformedData])
+        // Simulate API delay
+        setTimeout(() => {
+          setProducts(mockPetrolBunkProducts)
+          setLoading(false)
+        }, 500)
       } catch (error) {
-        console.error('Error fetching products:', error)
+        console.error('Error loading products:', error)
         setProducts([])
-      } finally {
         setLoading(false)
       }
     }
 
-    fetchProducts()
+    loadProducts()
   }, [])
 
 
@@ -263,7 +93,7 @@ export default function ProductList() {
           className='mb-2'
           subtitle="Manage your product inventory, pricing, and availability"
           stats={[
-            { label: 'Products', value: products.length, color: 'default' },
+            { label: 'Total Products', value: products.length, color: 'default' },
             { label: 'Active', value: products.filter(p => p.is_active !== false).length, color: 'primary' },
             { label: 'Inactive', value: products.filter(p => p.is_active === false).length, color: 'default' }
           ]}
