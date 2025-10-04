@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom'
+import React from 'react'
 
 // Mock Next.js router
 jest.mock('next/router', () => ({
@@ -41,6 +42,17 @@ jest.mock('next/navigation', () => ({
   },
   usePathname() {
     return '/'
+  },
+}))
+
+// Mock Next.js Image component
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: (props: any) => {
+    // Remove priority prop to avoid DOM warning
+    const { priority, ...imgProps } = props
+    // eslint-disable-next-line @next/next/no-img-element
+    return React.createElement('img', imgProps)
   },
 }))
 

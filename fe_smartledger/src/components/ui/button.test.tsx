@@ -38,6 +38,8 @@ describe('Button Component', () => {
     render(<Button loading>Loading Button</Button>)
     const button = screen.getByRole('button')
     expect(button).toBeDisabled()
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
+    // Check for loading spinner instead of text
+    const spinner = document.querySelector('.animate-spin')
+    expect(spinner).toBeInTheDocument()
   })
 })

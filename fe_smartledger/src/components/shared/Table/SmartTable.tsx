@@ -132,8 +132,8 @@ function SmartTable<T>({
 
 
   const { pages, showLeftEllipsis, showRightEllipsis } = usePagination({
-    currentPage: table.getState().pagination.pageIndex + 1,
-    totalPages: table.getPageCount(),
+    currentPage: enablePagination ? table.getState().pagination.pageIndex + 1 : 1,
+    totalPages: enablePagination ? table.getPageCount() : 1,
     paginationItemsToDisplay: paginationConfig.paginationItemsToDisplay || 5
   })
 
@@ -197,7 +197,7 @@ function SmartTable<T>({
             <SmartLoadingSpinner size="md" className="py-0" />
           </div>
         </div>
-      ) : true ? (
+      ) : data.length === 0 ? (
         /* Empty State - Show empty state instead of entire table */
         <div className={cn('rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden w-full max-w-full h-screen', useFlexSizing ? 'flex-1 flex flex-col' : '', heightClass)}>
           {children ? children : <DefaultEmptyState />}
@@ -312,8 +312,8 @@ function SmartTable<T>({
             {paginationConfig.showPageInfo && (
               <div className='flex-1 text-sm whitespace-nowrap flex items-center gap-4'>
                 <p className='text-gray-600' aria-live='polite'>
-                  Showing page <span className='font-semibold text-gray-900'>{table.getState().pagination.pageIndex + 1}</span> of{' '}
-                  <span className='font-semibold text-gray-900'>{table.getPageCount()}</span>
+                  Showing page <span className='font-semibold text-gray-900'>{enablePagination ? table.getState().pagination.pageIndex + 1 : 1}</span> of{' '}
+                  <span className='font-semibold text-gray-900'>{enablePagination ? table.getPageCount() : 1}</span>
                   <span className='ml-2 text-gray-500'>
                     ({table.getFilteredRowModel().rows.length} total items)
                   </span>
@@ -350,7 +350,7 @@ function SmartTable<T>({
                   )}
 
                   {pages.map(page => {
-                    const isActive = page === table.getState().pagination.pageIndex + 1
+                    const isActive = page === (enablePagination ? table.getState().pagination.pageIndex + 1 : 1)
 
                     return (
                       <PaginationItem key={page}>
@@ -358,7 +358,7 @@ function SmartTable<T>({
                           size='sm'
                           variant={isActive ? 'default' : 'outline'}
                           className='h-8 w-8'
-                          onClick={() => table.setPageIndex(page - 1)}
+                          onClick={() => enablePagination && table.setPageIndex(page - 1)}
                           aria-current={isActive ? 'page' : undefined}
                         >
                           {page}
@@ -393,9 +393,9 @@ function SmartTable<T>({
             {paginationConfig.showPageSizeSelector && (
               <div className='flex flex-1 justify-end'>
                 <Select
-                  value={table.getState().pagination.pageSize.toString()}
+                  value={enablePagination ? table.getState().pagination.pageSize.toString() : '10'}
                   onValueChange={value => {
-                    table.setPageSize(Number(value))
+                    enablePagination && table.setPageSize(Number(value))
                   }}
                 >
                   <SelectTrigger id='results-per-page' className='w-fit whitespace-nowrap h-8' aria-label='Results per page'>

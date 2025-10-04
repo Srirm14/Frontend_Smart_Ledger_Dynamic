@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react'
-import { useOnlineStatus } from '../use-online-status'
+import { useNetworkStatus } from './use-network-status'
 
 // Mock navigator.onLine
 const mockNavigator = {
@@ -11,20 +11,20 @@ Object.defineProperty(window, 'navigator', {
   writable: true,
 })
 
-describe('useOnlineStatus', () => {
+describe('useNetworkStatus', () => {
   beforeEach(() => {
     mockNavigator.onLine = true
   })
 
   it('should return initial online status', () => {
-    const { result } = renderHook(() => useOnlineStatus())
+    const { result } = renderHook(() => useNetworkStatus())
     
     expect(result.current.isOnline).toBe(true)
     expect(result.current.isOffline).toBe(false)
   })
 
   it('should update status when going offline', () => {
-    const { result } = renderHook(() => useOnlineStatus())
+    const { result } = renderHook(() => useNetworkStatus())
     
     act(() => {
       mockNavigator.onLine = false
@@ -37,7 +37,7 @@ describe('useOnlineStatus', () => {
   })
 
   it('should update status when coming back online', () => {
-    const { result } = renderHook(() => useOnlineStatus())
+    const { result } = renderHook(() => useNetworkStatus())
     
     // First go offline
     act(() => {
